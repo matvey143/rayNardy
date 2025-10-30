@@ -36,6 +36,14 @@
 *.x86_64
 *.hex
 
+# Raylib stuff
+rlgl.h
+raylib.h
+raymath.h
+
+# The game itself
+nardy
+
 # Debug files
 *.dSYM/
 *.su
