@@ -1,12 +1,23 @@
 #include <stdlib.h>
+#include <time.h>
 #include "raylib.h"
 
 #define WINDOW_W 640
 #define WINDOW_H 480
 #define PADDING 16.0
 
+void throwDice(unsigned char *dice1, unsigned char *dice2)
+{
+	// I do this crap only to get results for 2 dice with only 1 rand() call.
+	unsigned int value = (unsigned int) rand();
+	unsigned char *ptr = (unsigned char *) &value;
+	*dice1 = (ptr[0] % 6) + 1;
+	*dice2 = (ptr[1] % 6) + 1;
+}
+
 int main(void)
 {
+	srand(time(NULL));
 	InitWindow(WINDOW_W, WINDOW_H, "Nardy");
 	SetTargetFPS(60);
 	
@@ -18,6 +29,8 @@ int main(void)
 	*/
 	signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
+	unsigned char dieA, dieB;
+	throwDice(&dieA, &dieB);
 	while (!WindowShouldClose()) {
 		BeginDrawing();
 		{
@@ -103,6 +116,13 @@ int main(void)
 			DrawRectangle(WINDOW_H, 0, WINDOW_W - WINDOW_H, WINDOW_H, GRAY);
 			int titlePad = (WINDOW_W - WINDOW_H - MeasureText("Nardy", 32)) / 2;
 			DrawText("Nardy", WINDOW_H + titlePad, 0, 32, BLACK);
+			// Dice
+			// Left
+			DrawRectangle(500, 50, 50, 50, WHITE);
+			DrawRectangleLines(500, 50, 50, 50, BLACK);
+			// Here should be witch case for visualing dice value
+			DrawRectangle(570, 50, 50, 50, WHITE);
+			DrawRectangleLines(570, 50, 50, 50, BLACK);
 		}
 		EndDrawing();
 	}
