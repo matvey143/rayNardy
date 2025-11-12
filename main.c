@@ -6,13 +6,57 @@
 #define WINDOW_H 480
 #define PADDING 16.0
 
-void throwDice(unsigned char *dice1, unsigned char *dice2)
+void ThrowDice(unsigned char *dice1, unsigned char *dice2)
 {
 	// I do this crap only to get results for 2 dice with only 1 rand() call.
 	unsigned int value = (unsigned int) rand();
 	unsigned char *ptr = (unsigned char *) &value;
 	*dice1 = (ptr[0] % 6) + 1;
 	*dice2 = (ptr[1] % 6) + 1;
+}
+
+void DrawDice(unsigned char value, Rectangle dice)
+{
+	const float dotRadius = 4.0f;
+	switch (value) {
+	case 1:
+		DrawCircle(dice.x + dice.width / 2, dice.y + dice.height / 2, dotRadius, BLACK);
+		break;
+	case 2:
+		// Top-left
+		DrawCircle(dice.x + dice.width / 4, dice.y + dice.height / 4, dotRadius, BLACK);
+		// Bottom-right
+		DrawCircle(dice.x + dice.width - (dice.width / 4),
+				dice.y + dice.width - (dice.height / 4),
+				dotRadius, BLACK);
+		break;
+	case 3:
+		// Top-left
+		DrawCircle(dice.x + dice.width / 4, dice.y + dice.height / 4, dotRadius, BLACK);
+		// Middle
+		DrawCircle(dice.x + dice.width / 2, dice.y + dice.height / 2, dotRadius, BLACK);
+		// Bottom-right
+		DrawCircle(dice.x + dice.width - (dice.width / 4), dice.y + dice.width - (dice.height / 4), dotRadius, BLACK);
+		break;
+	case 4:
+		break;
+	case 5:
+		// Top-left
+		DrawCircle(dice.x + dice.width / 4, dice.y + dice.height / 4, dotRadius, BLACK);
+		// Top-Right
+		DrawCircle(dice.x + dice.width - (dice.width / 4), dice.y + dice.height / 4, dotRadius, BLACK);
+		// Middle
+		DrawCircle(dice.x + dice.width / 2, dice.y + dice.height / 2, dotRadius, BLACK);
+		// Bottom-left
+		DrawCircle(dice.x + dice.width - (dice.width / 4), dice.y + dice.height - (dice.height / 4), dotRadius, BLACK);
+		// Bottom-right
+		DrawCircle(dice.x + dice.width - (dice.width / 4), dice.y + dice.width - (dice.height / 4), dotRadius, BLACK);
+		break;
+	case 6:
+		break;
+	default:
+		break;
+	}
 }
 
 int main(void)
@@ -30,7 +74,7 @@ int main(void)
 	signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
 	unsigned char dieA, dieB;
-	throwDice(&dieA, &dieB);
+	ThrowDice(&dieA, &dieB);
 	while (!WindowShouldClose()) {
 		BeginDrawing();
 		{
