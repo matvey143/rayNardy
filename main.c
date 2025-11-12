@@ -20,39 +20,99 @@ void DrawDice(unsigned char value, Rectangle dice)
 	const float dotRadius = 4.0f;
 	switch (value) {
 	case 1:
-		DrawCircle(dice.x + dice.width / 2, dice.y + dice.height / 2, dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f,
+				dice.y + dice.height * 0.5f,
+				dotRadius, BLACK);
 		break;
 	case 2:
 		// Top-left
-		DrawCircle(dice.x + dice.width / 4, dice.y + dice.height / 4, dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width - (dice.width / 4),
-				dice.y + dice.width - (dice.height / 4),
+		DrawCircle(dice.x + dice.width * 0.75f,
+				dice.y + dice.height * 0.75f,
 				dotRadius, BLACK);
 		break;
 	case 3:
 		// Top-left
-		DrawCircle(dice.x + dice.width / 4, dice.y + dice.height / 4, dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
 		// Middle
-		DrawCircle(dice.x + dice.width / 2, dice.y + dice.height / 2, dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f,
+				dice.y + dice.height * 0.5f,
+				dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width - (dice.width / 4), dice.y + dice.width - (dice.height / 4), dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,
+				dice.y + dice.height * 0.75f,
+				dotRadius, BLACK);
 		break;
 	case 4:
+		// Top-left
+		DrawCircle(dice.x + dice.width * 0.25f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
+		// Top-Right
+		DrawCircle(dice.x + dice.width * 0.75f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
+		// Bottom-left
+		DrawCircle(dice.x + dice.width * 0.25f,
+				dice.y + dice.height * 0.75f,
+				dotRadius, BLACK);
+		// Bottom-right
+		DrawCircle(dice.x + dice.width * 0.75f,
+				dice.y + dice.height * 0.75f,
+				dotRadius, BLACK);
 		break;
 	case 5:
 		// Top-left
-		DrawCircle(dice.x + dice.width / 4, dice.y + dice.height / 4, dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
 		// Top-Right
-		DrawCircle(dice.x + dice.width - (dice.width / 4), dice.y + dice.height / 4, dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
 		// Middle
-		DrawCircle(dice.x + dice.width / 2, dice.y + dice.height / 2, dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f,
+				dice.y + dice.height * 0.5f,
+				dotRadius, BLACK);
 		// Bottom-left
-		DrawCircle(dice.x + dice.width - (dice.width / 4), dice.y + dice.height - (dice.height / 4), dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,
+				dice.y + dice.height * 0.75f,
+				dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width - (dice.width / 4), dice.y + dice.width - (dice.height / 4), dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,
+				dice.y + dice.height * 0.75f,
+				dotRadius, BLACK);
 		break;
 	case 6:
+		// Top-left
+		DrawCircle(dice.x + dice.width * 0.25f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
+		// Top-Mid
+		DrawCircle(dice.x + dice.width * 0.5f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
+		// Top-Right
+		DrawCircle(dice.x + dice.width * 0.75f,
+				dice.y + dice.height * 0.25f,
+				dotRadius, BLACK);
+		// Bottom-left
+		DrawCircle(dice.x + dice.width * 0.25f,
+				dice.y + dice.height * 0.75f,
+				dotRadius, BLACK);
+		// Bottom-mid
+		DrawCircle(dice.x + dice.width * 0.5f,
+				dice.y + dice.height * 0.75f,
+				dotRadius, BLACK);
+		// Bottom-right
+		DrawCircle(dice.x + dice.width * 0.75f,
+				dice.y + dice.height * 0.75f,
+				dotRadius, BLACK);
 		break;
 	default:
 		break;
@@ -162,11 +222,15 @@ int main(void)
 			DrawText("Nardy", WINDOW_H + titlePad, 0, 32, BLACK);
 			// Dice
 			// Left
-			DrawRectangle(500, 50, 50, 50, WHITE);
-			DrawRectangleLines(500, 50, 50, 50, BLACK);
+			Rectangle dieLeft = {500.0f, 50.0f, 50.0f, 50.0f};
+			Rectangle dieRight = {570.0f, 50.0f, 50.0f, 50.0f};
+			DrawRectangleRec(dieLeft, WHITE);
+			DrawRectangleLinesEx(dieLeft, 2.0f, BLACK);
+			DrawDice(dieA, dieLeft);
 			// Here should be witch case for visualing dice value
-			DrawRectangle(570, 50, 50, 50, WHITE);
-			DrawRectangleLines(570, 50, 50, 50, BLACK);
+			DrawRectangleRec(dieRight, WHITE);
+			DrawRectangleLinesEx(dieRight, 2.0f, BLACK);
+			DrawDice(dieB, dieRight);
 		}
 		EndDrawing();
 	}
