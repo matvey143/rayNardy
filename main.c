@@ -77,6 +77,11 @@ void DrawDice(unsigned char value, Rectangle dice)
 	}
 }
 
+enum Turn {
+	TURN_BLACK = 0,
+	TURN_WHITE = 1
+};
+
 int main(void)
 {
 	srand(time(NULL));
@@ -86,12 +91,13 @@ int main(void)
 	/* Array starts with top-left corner and goes through board clockwise.
 	Positive values means white pieces, negayive - black, zero - unoccupied.
 	So on board it like :
-	( )  ( )( )( )( )( )( )( )( )( )( )(15W)
-	(15b)( )( )( )( )( )( )( )( )( )( )( )
+	(   )( )( )( )( )( )( )( )( )( )( )(15W)
+	(15b)( )( )( )( )( )( )( )( )( )( )(   )
 	*/
 	signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
 	unsigned char dieA, dieB;
+	enum Turn turn = 0;
 	ThrowDice(&dieA, &dieB);
 	while (!WindowShouldClose()) {
 		BeginDrawing();
