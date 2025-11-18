@@ -20,99 +20,57 @@ void DrawDice(unsigned char value, Rectangle dice)
 	const float dotRadius = 4.0f;
 	switch (value) {
 	case 1:
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.5f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f, dotRadius, BLACK);
 		break;
 	case 2:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	case 3:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Middle
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.5f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	case 4:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Top-Right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Bottom-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	case 5:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Top-Right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Middle
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.5f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f,	dotRadius, BLACK);
 		// Bottom-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	case 6:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Top-Mid
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Top-Right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Bottom-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		// Bottom-mid
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	default:
 		break;
