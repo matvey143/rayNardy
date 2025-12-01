@@ -127,6 +127,39 @@ struct BoardMark {
 };
 
 constexpr Color basicMarkColor = (Color) {0x55, 0x31, 0x11, 0xFF};
+// Assumes 24 space board
+void updateMarkPosition(struct BoardMark *markArray)
+{
+	const float trianglePad = (WINDOW_H / 2.0 - PADDING * 2.0) / 19.0;
+	// Left
+	for (int i = 0; i < 6; i++) {
+		float leftmostX = PADDING + trianglePad * 3.0 * i + trianglePad;
+		// Top
+		markArray[i].v1 = {leftmostX, PADDING};
+		markArray[i].v2 = {leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
+		markArray[i].v3 = {leftmostX + trianglePad * 2, PADDING};
+		markArray[i].color = basicMarkColor;
+		// Bottom
+		markArray[23 - i].v1 = {leftmostX, WINDOW_H - PADDING};
+		markArray[23 - i].v2 = {leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
+		markArray[23 - i].v3 = {leftmostX + trianglePad * 2, WINDOW_H - PADDING};
+		markArray[23 - i].color = basicMarkColor;
+	}
+	// Right
+	for (int i = 0; i < 6; i++) {
+		float leftmostX = WINDOW_H / 2.0 + PADDING + trianglePad * 3.0 * i + trianglePad;
+		// Top
+		markArray[i + 6].v1 = {leftmostX, PADDING};
+		markArray[i + 6].v2 = {leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
+		markArray[i + 6].v3 = {leftmostX + trianglePad * 2, PADDING};
+		markArray[i + 6].color = basicMarkColor;
+		// Bottom
+		markArray[17 - i].v1 = {leftmostX, WINDOW_H - PADDING};
+		markArray[17 - i].v2 = {leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
+		markArray[17 - i].v3 = {leftmostX + trianglePad * 2, WINDOW_H - PADDING};
+		markArray[17 - i].color = basicMarkColor;
+	}
+}
 
 int main(void)
 {
@@ -186,7 +219,7 @@ int main(void)
 					int temp = 23 - i;
 					Color pieceColor = board[temp] > 0 ? WHITE : BLACK;
 					for (int j = 0; j < abs(board[temp]); j++) {
-						int x = leftmostX + trianglePad;
+			int x = leftmostX + trianglePad;
 						int y = WINDOW_H - PADDING - pieceRadius - pieceRadius * 2 * j;
 						DrawCircle(x, y, pieceRadius, pieceColor);
 					}
