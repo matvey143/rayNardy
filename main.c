@@ -136,6 +136,8 @@ int main(void)
 	unsigned char dieA, dieB;
 	ThrowDice(&dieA, &dieB);
 	while (!WindowShouldClose()) {
+		// Too much stuff is happening in rendering phase. It is probably best
+		// to move some stuff outside of it
 		BeginDrawing();
 		{
 			// Board
@@ -165,7 +167,7 @@ int main(void)
 						DrawCircle(x, y, pieceRadius, pieceColor);
 					}
 				}
-				// Bottom
+			// Bottom
 				v1.y = WINDOW_H - PADDING;
 				v2.y = WINDOW_H / 2.0 + PADDING;
 				v3.y = WINDOW_H - PADDING;
