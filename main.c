@@ -119,6 +119,15 @@ void DrawDice(unsigned char value, Rectangle dice)
 	}
 }
 
+struct BoardMark {
+	Vector2 v1;
+	Vector2 v2;
+	Vector3 v3;
+	Color color; // Changes when it is highlighted and to show possible turns.
+};
+
+constexpr Color basicMarkColor = (Color) {0x55, 0x31, 0x11, 0xFF};
+
 int main(void)
 {
 	srand(time(NULL));
