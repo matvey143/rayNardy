@@ -20,99 +20,57 @@ void DrawDice(unsigned char value, Rectangle dice)
 	const float dotRadius = 4.0f;
 	switch (value) {
 	case 1:
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.5f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f, dotRadius, BLACK);
 		break;
 	case 2:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	case 3:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Middle
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.5f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	case 4:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Top-Right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Bottom-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	case 5:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Top-Right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Middle
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.5f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f,	dotRadius, BLACK);
 		// Bottom-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	case 6:
 		// Top-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Top-Mid
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Top-Right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.25f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.25f, dotRadius, BLACK);
 		// Bottom-left
-		DrawCircle(dice.x + dice.width * 0.25f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		// Bottom-mid
-		DrawCircle(dice.x + dice.width * 0.5f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		// Bottom-right
-		DrawCircle(dice.x + dice.width * 0.75f,
-				dice.y + dice.height * 0.75f,
-				dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.75f, dotRadius, BLACK);
 		break;
 	default:
 		break;
@@ -124,6 +82,11 @@ struct BoardMark {
 	Vector2 v2;
 	Vector2 v3;
 	Color color; // Changes when it is highlighted and to show possible turns.
+	};
+	
+enum Turn {
+	TURN_BLACK = 0,
+	TURN_WHITE = 1
 };
 
 #define BASIC_MARK_COLOR ((Color) {0x55, 0x31, 0x11, 0xFF})
@@ -170,12 +133,13 @@ int main(void)
 	/* Array starts with top-left corner and goes through board clockwise.
 	Positive values means white pieces, negayive - black, zero - unoccupied.
 	So on board it like :
-	( )  ( )( )( )( )( )( )( )( )( )( )(15W)
-	(15b)( )( )( )( )( )( )( )( )( )( )( )
+	(   )( )( )( )( )( )( )( )( )( )( )(15W)
+	(15b)( )( )( )( )( )( )( )( )( )( )(   )
 	*/
 	signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
 	unsigned char dieA, dieB;
+	enum Turn turn = 0;
 	ThrowDice(&dieA, &dieB);
 	while (!WindowShouldClose()) {
 		// Too much stuff is happening in rendering phase. It is probably best
