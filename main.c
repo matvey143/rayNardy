@@ -122,11 +122,11 @@ void DrawDice(unsigned char value, Rectangle dice)
 struct BoardMark {
 	Vector2 v1;
 	Vector2 v2;
-	Vector3 v3;
+	Vector2 v3;
 	Color color; // Changes when it is highlighted and to show possible turns.
 };
 
-constexpr Color basicMarkColor = (Color) {0x55, 0x31, 0x11, 0xFF};
+#define BASIC_MARK_COLOR ((Color) {0x55, 0x31, 0x11, 0xFF})
 // Assumes 24 space board
 void updateMarkPosition(struct BoardMark *markArray)
 {
@@ -135,29 +135,29 @@ void updateMarkPosition(struct BoardMark *markArray)
 	for (int i = 0; i < 6; i++) {
 		float leftmostX = PADDING + trianglePad * 3.0 * i + trianglePad;
 		// Top
-		markArray[i].v1 = {leftmostX, PADDING};
-		markArray[i].v2 = {leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
-		markArray[i].v3 = {leftmostX + trianglePad * 2, PADDING};
-		markArray[i].color = basicMarkColor;
+		markArray[i].v1 = (Vector2){leftmostX, PADDING};
+		markArray[i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
+		markArray[i].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
+		markArray[i].color = BASIC_MARK_COLOR;
 		// Bottom
-		markArray[23 - i].v1 = {leftmostX, WINDOW_H - PADDING};
-		markArray[23 - i].v2 = {leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
-		markArray[23 - i].v3 = {leftmostX + trianglePad * 2, WINDOW_H - PADDING};
-		markArray[23 - i].color = basicMarkColor;
+		markArray[23 - i].v1 = (Vector2){leftmostX, WINDOW_H - PADDING};
+		markArray[23 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
+		markArray[23 - i].v3 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
+		markArray[23 - i].color = BASIC_MARK_COLOR;
 	}
 	// Right
 	for (int i = 0; i < 6; i++) {
 		float leftmostX = WINDOW_H / 2.0 + PADDING + trianglePad * 3.0 * i + trianglePad;
 		// Top
-		markArray[i + 6].v1 = {leftmostX, PADDING};
-		markArray[i + 6].v2 = {leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
-		markArray[i + 6].v3 = {leftmostX + trianglePad * 2, PADDING};
-		markArray[i + 6].color = basicMarkColor;
+		markArray[i + 6].v1 = (Vector2){leftmostX, PADDING};
+		markArray[i + 6].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
+		markArray[i + 6].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
+		markArray[i + 6].color = BASIC_MARK_COLOR;
 		// Bottom
-		markArray[17 - i].v1 = {leftmostX, WINDOW_H - PADDING};
-		markArray[17 - i].v2 = {leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
-		markArray[17 - i].v3 = {leftmostX + trianglePad * 2, WINDOW_H - PADDING};
-		markArray[17 - i].color = basicMarkColor;
+		markArray[17 - i].v1 = (Vector2){leftmostX, WINDOW_H - PADDING};
+		markArray[17 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
+		markArray[17 - i].v3 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
+		markArray[17 - i].color = BASIC_MARK_COLOR;
 	}
 }
 
