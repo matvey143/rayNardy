@@ -103,9 +103,9 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[i].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
 		markArray[i].color = BASIC_MARK_COLOR;
 		// Bottom
-		markArray[23 - i].v1 = (Vector2){leftmostX, WINDOW_H - PADDING};
+		markArray[23 - i].v3 = (Vector2){leftmostX, WINDOW_H - PADDING};
 		markArray[23 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
-		markArray[23 - i].v3 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
+		markArray[23 - i].v1 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
 		markArray[23 - i].color = BASIC_MARK_COLOR;
 	}
 	// Right
@@ -117,9 +117,9 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[i + 6].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
 		markArray[i + 6].color = BASIC_MARK_COLOR;
 		// Bottom
-		markArray[17 - i].v1 = (Vector2){leftmostX, WINDOW_H - PADDING};
+		markArray[17 - i].v3 = (Vector2){leftmostX, WINDOW_H - PADDING};
 		markArray[17 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
-		markArray[17 - i].v3 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
+		markArray[17 - i].v1 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
 		markArray[17 - i].color = BASIC_MARK_COLOR;
 	}
 }
@@ -138,6 +138,8 @@ int main(void)
 	*/
 	signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
+	struct BoardMark markings[24];
+	updateMarkPosition(markings);
 	unsigned char dieA, dieB;
 	enum Turn turn = 0;
 	ThrowDice(&dieA, &dieB);
@@ -154,88 +156,35 @@ int main(void)
 			DrawRectangleLinesEx((Rectangle){(float)WINDOW_H / 2, 0.0, (float)WINDOW_H / 2, (float)WINDOW_H},
 					PADDING, (Color) {0x6F, 0x4F, 0x2F, 0xFF});
 			// Board markings
-			const float trianglePad = (WINDOW_H / 2.0 - PADDING * 2.0) / 19.0;
-			const float pieceRadius = trianglePad * 0.60;
-			// Left
-			for (int i = 0; i < 6; i++) {
-				float leftmostX = PADDING + trianglePad * 3.0 * i + trianglePad;
+			for (int i = 0; i < 24; i++) {
 				// Top
-				Vector2 v1 = {leftmostX, PADDING};
-				Vector2 v2 = {leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
-				Vector2 v3 = {leftmostX + trianglePad * 2, PADDING};
-				DrawTriangle(v1, v2, v3, (Color) {0x55, 0x31, 0x11, 0xFF});
+				DrawTriangle(markings[i].v1, markings[i].v2, markings[i].v3, markings[i].color);
 				// Drawing pieces
 				if (board[i] != 0) {
+					float pieceRadius = 6.0f;
+					int x = (int) markings[i].v2.x;
+					int y = (int) markings[i].v1.y;
+					if (i < 12) y += pieceRadius;
+					else  y -= pieceRadius;
 					Color pieceColor = board[i] > 0 ? WHITE : BLACK;
 					for (int j = 0; j < abs(board[i]); j++) {
-						int x = leftmostX + trianglePad;
-						int y = PADDING + pieceRadius + pieceRadius * 2 * j;
+						//int y = PADDING + pieceRadius + pieceRadius * 2 * j;
 						DrawCircle(x, y, pieceRadius, pieceColor);
-					}
-				}
-			// Bottom
-				v1.y = WINDOW_H - PADDING;
-				v2.y = WINDOW_H / 2.0 + PADDING;
-				v3.y = WINDOW_H - PADDING;
-				DrawTriangle(v1, v3, v2, (Color) {0x55, 0x31, 0x11, 0xFF});
-				// Drawing pieces
-				if (board[23-i] != 0) {
-					int temp = 23 - i;
-					Color pieceColor = board[temp] > 0 ? WHITE : BLACK;
-					for (int j = 0; j < abs(board[temp]); j++) {
-			int x = leftmostX + trianglePad;
-						int y = WINDOW_H - PADDING - pieceRadius - pieceRadius * 2 * j;
-						DrawCircle(x, y, pieceRadius, pieceColor);
+						if (i < 12) y += pieceRadius * 2;
+						else y -= pieceRadius * 2;
 					}
 				}
 			}
-			// Right
-			for (int i = 0; i < 6; i++) {
-				float leftmostX = WINDOW_H / 2.0 + PADDING + trianglePad * 3.0 * i + trianglePad;
-				// Top
-				Vector2 v1 = {leftmostX, PADDING};
-				Vector2 v2 = {leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
-				Vector2 v3 = {leftmostX + trianglePad * 2, PADDING};
-				DrawTriangle(v1, v2, v3, (Color) {0x55, 0x31, 0x11, 0xFF});
-				// Drawing pieces
-				if (board[i+6] != 0) {
-					int temp = i + 6;
-					Color pieceColor = board[temp] > 0 ? WHITE : BLACK;
-					for (int j = 0; j < abs(board[temp]); j++) {
-						int x = leftmostX + trianglePad;
-						int y = PADDING + pieceRadius + pieceRadius * 2 * j;
-						DrawCircle(x, y, pieceRadius, pieceColor);
-					}
-				}
-				// Bottom
-				v1.y = WINDOW_H - PADDING;
-				v2.y = WINDOW_H / 2.0 + PADDING;
-				v3.y = WINDOW_H - PADDING;
-				DrawTriangle(v1, v3, v2, (Color) {0x55, 0x31, 0x11, 0xFF});
-				// Drawing pieces
-				if (board[17-i] != 0) {
-					int temp = 17 - i;
-					Color pieceColor = board[temp] > 0 ? WHITE : BLACK;
-					for (int j = 0; j < abs(board[temp]); j++) {
-						int x = leftmostX + trianglePad;
-						int y = WINDOW_H - PADDING - pieceRadius - pieceRadius * 2 * j;
-						DrawCircle(x, y, pieceRadius, pieceColor);
-					}
-				}
-			}
-
 			// Side bar
 			DrawRectangle(WINDOW_H, 0, WINDOW_W - WINDOW_H, WINDOW_H, GRAY);
 			int titlePad = (WINDOW_W - WINDOW_H - MeasureText("Nardy", 32)) / 2;
 			DrawText("Nardy", WINDOW_H + titlePad, 0, 32, BLACK);
 			// Dice
-			// Left
 			Rectangle dieLeft = {500.0f, 50.0f, 50.0f, 50.0f};
 			Rectangle dieRight = {570.0f, 50.0f, 50.0f, 50.0f};
 			DrawRectangleRec(dieLeft, WHITE);
 			DrawRectangleLinesEx(dieLeft, 2.0f, BLACK);
 			DrawDice(dieA, dieLeft);
-			// Here should be witch case for visualing dice value
 			DrawRectangleRec(dieRight, WHITE);
 			DrawRectangleLinesEx(dieRight, 2.0f, BLACK);
 			DrawDice(dieB, dieRight);
