@@ -150,6 +150,7 @@ int main(void)
 					for (int j = 0; j < abs(board[i]); j++) {
 						//int y = PADDING + pieceRadius + pieceRadius * 2 * j;
 						DrawCircle(x, y, pieceRadius, pieceColor);
+						DrawCircleLines(x, y, pieceRadius, DARKGRAY);
 						if (i < 12) y += pieceRadius * 2;
 						else y -= pieceRadius * 2;
 					}
