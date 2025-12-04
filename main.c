@@ -57,11 +57,17 @@ void DrawDice(unsigned char value, Rectangle dice)
 	}
 }
 
+enum MarkStatus {
+	MARK_UNSELECTED = 0,
+	MARK_SELECTED = 1
+};
+
 struct BoardMark {
 	Vector2 v1;
 	Vector2 v2;
 	Vector2 v3;
 	Color color; // Changes when it is highlighted and to show possible turns.
+	enum MarkStatus status;
 };
 	
 enum Turn {
@@ -69,7 +75,9 @@ enum Turn {
 	TURN_WHITE = 1
 };
 
-#define BASIC_MARK_COLOR ((Color) {0x55, 0x31, 0x11, 0xFF})
+#define MARK_COLOR_BASIC ((Color) {0x55, 0x31, 0x11, 0xFF})
+#define MARK_COLOR_MOUSEON SKYBLUE
+
 // Assumes 24 space board
 void updateMarkPosition(struct BoardMark *markArray)
 {
@@ -81,12 +89,14 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[i].v1 = (Vector2){leftmostX, PADDING};
 		markArray[i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
 		markArray[i].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
-		markArray[i].color = BASIC_MARK_COLOR;
+		markArray[i].color = MARK_COLOR_BASIC;
+		markArray[i].status = MARK_UNSELECTED;
 		// Bottom
 		markArray[23 - i].v3 = (Vector2){leftmostX, WINDOW_H - PADDING};
 		markArray[23 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
 		markArray[23 - i].v1 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
-		markArray[23 - i].color = BASIC_MARK_COLOR;
+		markArray[23 - i].color = MARK_COLOR_BASIC;
+		markArray[23 - i].status = MARK_UNSELECTED;
 	}
 	// Right
 	for (int i = 0; i < 6; i++) {
@@ -95,12 +105,14 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[i + 6].v1 = (Vector2){leftmostX, PADDING};
 		markArray[i + 6].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
 		markArray[i + 6].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
-		markArray[i + 6].color = BASIC_MARK_COLOR;
+		markArray[i + 6].color = MARK_COLOR_BASIC;
+		markArray[i + 6].status = MARK_UNSELECTED;
 		// Bottom
 		markArray[17 - i].v3 = (Vector2){leftmostX, WINDOW_H - PADDING};
 		markArray[17 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
 		markArray[17 - i].v1 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
-		markArray[17 - i].color = BASIC_MARK_COLOR;
+		markArray[17 - i].color = MARK_COLOR_BASIC;
+		markArray[17 - i].status = MARK_UNSELECTED;
 	}
 }
 
@@ -111,7 +123,7 @@ int main(void)
 	SetTargetFPS(60);
 	
 	/* Array starts with top-left corner and goes through board clockwise.
-	Positive values means white pieces, negayive - black, zero - unoccupied.
+	Positive values means white pieces, negative - black, zero - unoccupied.
 	So on board it like :
 	(   )( )( )( )( )( )( )( )( )( )( )(15W)
 	(15b)( )( )( )( )( )( )( )( )( )( )(   )
@@ -121,11 +133,28 @@ int main(void)
 	struct BoardMark markings[24];
 	updateMarkPosition(markings);
 	unsigned char dieA, dieB;
-	enum Turn turn = 0;
+	enum Turn currentTurn = 0;
 	ThrowDice(&dieA, &dieB);
 	while (!WindowShouldClose()) {
-		// Too much stuff is happening in rendering phase. It is probably best
-		// to move some stuff outside of it
+		Vector2 mouseXY = GetMousePosition();
+		switch (currentTurn) {
+		case TURN_BLACK:
+			for (int i = 0; i < 24; i++) {
+				if (markings[i].status == MARK_UNSELECTED && board[i] < 0 &&
+						CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
+					markings[i].color = MARK_COLOR_MOUSEON;
+					markings[i].status = MARK_SELECTED;
+				}
+				else if (markings[i].status == MARK_SELECTED && board[i] < 0 &&
+						!CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
+					markings[i].color = MARK_COLOR_BASIC;
+					markings[i].status = MARK_UNSELECTED;
+				}
+			}
+			break;
+		case TURN_WHITE:
+			break;
+		}
 		BeginDrawing();
 		{
 			// Board
