@@ -69,10 +69,12 @@ struct BoardMark {
 	Color color; // Changes when it is highlighted and to show possible turns.
 	enum MarkStatus status;
 };
-	
+
 enum Turn {
-	TURN_BLACK = 0,
-	TURN_WHITE = 1
+	TURN_BLACK_SELECT = 0, // For picking piece
+	TURN_BLACK_MOVE = 1,
+	TURN_WHITE_SELECT = 2,
+	TURN_BLACK_MOVE = 3
 };
 
 #define MARK_COLOR_BASIC ((Color) {0x55, 0x31, 0x11, 0xFF})
@@ -121,7 +123,7 @@ int main(void)
 	srand(time(NULL));
 	InitWindow(WINDOW_W, WINDOW_H, "Nardy");
 	SetTargetFPS(60);
-	
+
 	/* Array starts with top-left corner and goes through board clockwise.
 	Positive values means white pieces, negative - black, zero - unoccupied.
 	So on board it like :
@@ -138,7 +140,7 @@ int main(void)
 	while (!WindowShouldClose()) {
 		Vector2 mouseXY = GetMousePosition();
 		switch (currentTurn) {
-		case TURN_BLACK:
+		case TURN_BLACK_SELECT:
 			for (int i = 0; i < 24; i++) {
 				if (markings[i].status == MARK_UNSELECTED && board[i] < 0 &&
 						CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
@@ -152,7 +154,7 @@ int main(void)
 				}
 			}
 			break;
-		case TURN_WHITE:
+		case TURN_BLACK_MOVE:
 			break;
 		}
 		BeginDrawing();
