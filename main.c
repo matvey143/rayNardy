@@ -58,8 +58,12 @@ void DrawDice(unsigned char value, Rectangle dice)
 }
 
 enum MarkStatus {
-	MARK_UNSELECTED = 0,
-	MARK_SELECTED = 1
+	MARK_IDLE = 0,
+	MARK_MOUSEON = 1,
+	MARK_MOUSEDOWN = 2,
+	MARK_SELECTED = 3,
+	MARK_LEGAL = 4,
+	MARK_ILLEGAL = 5
 };
 
 struct BoardMark {
@@ -74,11 +78,15 @@ enum Turn {
 	TURN_BLACK_SELECT = 0, // For picking piece
 	TURN_BLACK_MOVE = 1,
 	TURN_WHITE_SELECT = 2,
-	TURN_BLACK_MOVE = 3
+	TURN_WHITE_MOVE = 3
 };
 
 #define MARK_COLOR_BASIC ((Color) {0x55, 0x31, 0x11, 0xFF})
 #define MARK_COLOR_MOUSEON SKYBLUE
+#define MARK_COLOR_MOUSEDOWN DARKBLUE
+#define MARK_COLOR_SELECTED BLUE
+#define MARK_COLOR_LEGAL GREEN
+#define MARK_COLOR_ILLEGAL RED
 
 // Assumes 24 space board
 void updateMarkPosition(struct BoardMark *markArray)
@@ -92,13 +100,13 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
 		markArray[i].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
 		markArray[i].color = MARK_COLOR_BASIC;
-		markArray[i].status = MARK_UNSELECTED;
+		markArray[i].status = MARK_IDLE;
 		// Bottom
 		markArray[23 - i].v3 = (Vector2){leftmostX, WINDOW_H - PADDING};
 		markArray[23 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
 		markArray[23 - i].v1 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
 		markArray[23 - i].color = MARK_COLOR_BASIC;
-		markArray[23 - i].status = MARK_UNSELECTED;
+		markArray[23 - i].status = MARK_IDLE;
 	}
 	// Right
 	for (int i = 0; i < 6; i++) {
@@ -108,13 +116,13 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[i + 6].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
 		markArray[i + 6].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
 		markArray[i + 6].color = MARK_COLOR_BASIC;
-		markArray[i + 6].status = MARK_UNSELECTED;
+		markArray[i + 6].status = MARK_IDLE;
 		// Bottom
 		markArray[17 - i].v3 = (Vector2){leftmostX, WINDOW_H - PADDING};
 		markArray[17 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
 		markArray[17 - i].v1 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
 		markArray[17 - i].color = MARK_COLOR_BASIC;
-		markArray[17 - i].status = MARK_UNSELECTED;
+		markArray[17 - i].status = MARK_IDLE;
 	}
 }
 
@@ -142,7 +150,7 @@ int main(void)
 		switch (currentTurn) {
 		case TURN_BLACK_SELECT:
 			for (int i = 0; i < 24; i++) {
-				if (markings[i].status == MARK_UNSELECTED && board[i] < 0 &&
+				if (markings[i].status == MARK_IDLE && board[i] < 0 &&
 						CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
 					markings[i].color = MARK_COLOR_MOUSEON;
 					markings[i].status = MARK_SELECTED;
@@ -150,7 +158,7 @@ int main(void)
 				else if (markings[i].status == MARK_SELECTED && board[i] < 0 &&
 						!CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
 					markings[i].color = MARK_COLOR_BASIC;
-					markings[i].status = MARK_UNSELECTED;
+					markings[i].status = MARK_IDLE;
 				}
 			}
 			break;
