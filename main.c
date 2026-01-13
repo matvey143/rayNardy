@@ -70,7 +70,6 @@ struct BoardMark {
 	Vector2 v1;
 	Vector2 v2;
 	Vector2 v3;
-	Color color; // Changes when it is highlighted and to show possible turns.
 	enum MarkStatus status;
 };
 
@@ -99,13 +98,11 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[i].v1 = (Vector2){leftmostX, PADDING};
 		markArray[i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
 		markArray[i].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
-		markArray[i].color = MARK_COLOR_BASIC;
 		markArray[i].status = MARK_IDLE;
 		// Bottom
 		markArray[23 - i].v3 = (Vector2){leftmostX, WINDOW_H - PADDING};
 		markArray[23 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
 		markArray[23 - i].v1 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
-		markArray[23 - i].color = MARK_COLOR_BASIC;
 		markArray[23 - i].status = MARK_IDLE;
 	}
 	// Right
@@ -115,13 +112,11 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[i + 6].v1 = (Vector2){leftmostX, PADDING};
 		markArray[i + 6].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) - PADDING};
 		markArray[i + 6].v3 = (Vector2){leftmostX + trianglePad * 2, PADDING};
-		markArray[i + 6].color = MARK_COLOR_BASIC;
 		markArray[i + 6].status = MARK_IDLE;
 		// Bottom
 		markArray[17 - i].v3 = (Vector2){leftmostX, WINDOW_H - PADDING};
 		markArray[17 - i].v2 = (Vector2){leftmostX + trianglePad, (WINDOW_H / 2) + PADDING};
 		markArray[17 - i].v1 = (Vector2){leftmostX + trianglePad * 2, WINDOW_H - PADDING};
-		markArray[17 - i].color = MARK_COLOR_BASIC;
 		markArray[17 - i].status = MARK_IDLE;
 	}
 }
@@ -141,6 +136,13 @@ int main(void)
 	signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
 	struct BoardMark markings[24];
+	Color statusColor[6];
+	statusColor[MARK_IDLE] = MARK_COLOR_BASIC;
+	statusColor[MARK_MOUSEON] = MARK_COLOR_MOUSEON;
+	statusColor[MARK_MOUSEDOWN] = MARK_COLOR_MOUSEDOWN;
+	statusColor[MARK_SELECTED] = MARK_COLOR_SELECTED;
+	statusColor[MARK_LEGAL] = MARK_COLOR_LEGAL;
+	statusColor[MARK_ILLEGAL] = MARK_COLOR_ILLEGAL;
 	updateMarkPosition(markings);
 	unsigned char dieA, dieB;
 	enum Turn currentTurn = 0;
@@ -150,16 +152,15 @@ int main(void)
 		switch (currentTurn) {
 		case TURN_BLACK_SELECT:
 			for (int i = 0; i < 24; i++) {
-				if (markings[i].status == MARK_IDLE && board[i] < 0 &&
-						CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
-					markings[i].color = MARK_COLOR_MOUSEON;
-					markings[i].status = MARK_SELECTED;
+				if (board[i] < 0 &&	CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
+					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
+					else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+						currentTurn = TURN_BLACK_MOVE;
+						markings[i].status = MARK_SELECTED;
+					}
+					else markings[i].status = MARK_MOUSEON; // Mouse on
 				}
-				else if (markings[i].status == MARK_SELECTED && board[i] < 0 &&
-						!CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
-					markings[i].color = MARK_COLOR_BASIC;
-					markings[i].status = MARK_IDLE;
-				}
+				else markings[i].status = MARK_IDLE;
 			}
 			break;
 		case TURN_BLACK_MOVE:
@@ -177,7 +178,7 @@ int main(void)
 			// Board markings
 			for (int i = 0; i < 24; i++) {
 				// Top
-				DrawTriangle(markings[i].v1, markings[i].v2, markings[i].v3, markings[i].color);
+				DrawTriangle(markings[i].v1, markings[i].v2, markings[i].v3, statusColor[markings[i].status]);
 				// Drawing pieces
 				if (board[i] != 0) {
 					float pieceRadius = 6.0f;
