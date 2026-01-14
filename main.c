@@ -145,6 +145,7 @@ int main(void)
 	statusColor[MARK_ILLEGAL] = COLOR_MARK_ILLEGAL;
 	updateMarkPosition(markings);
 	unsigned char dieA, dieB;
+	int selectedMark;
 	enum Turn currentTurn = 0;
 	ThrowDice(&dieA, &dieB);
 	while (!WindowShouldClose()) {
@@ -157,6 +158,12 @@ int main(void)
 					else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 						currentTurn = TURN_BLACK_MOVE;
 						markings[i].status = MARK_SELECTED;
+						selectedMark = i;
+						if (board[i - dieA] > 0) markings[i - dieA].status = MARK_ILLEGAL;
+						else markings[i - dieA].status = MARK_LEGAL;
+						if (board[i - dieB] > 0) markings[i - dieB].status = MARK_ILLEGAL;
+						else markings[i - dieB].status = MARK_LEGAL;
+						break;
 					}
 					else markings[i].status = MARK_MOUSEON; // Mouse on
 				}
@@ -164,6 +171,29 @@ int main(void)
 			}
 			break;
 		case TURN_BLACK_MOVE:
+			// First die check
+			// Second die check
+			break;
+		case TURN_WHITE_SELECT:
+			for (int i = 0; i < 24; i++) {
+				if (board[i] > 0 &&	CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
+					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
+					else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+						currentTurn = TURN_WHITE_MOVE;
+						markings[i].status = MARK_SELECTED;
+						selectedMark = i;
+						if (board[i + dieA] < 0) markings[i + dieA].status = MARK_ILLEGAL;
+						else markings[i - dieA].status = MARK_LEGAL;
+						if (board[i + dieB] < 0) markings[i + dieB].status = MARK_ILLEGAL;
+						else markings[i + dieB].status = MARK_LEGAL;
+						break;
+					}
+					else markings[i].status = MARK_MOUSEON; // Mouse on
+				}
+				else markings[i].status = MARK_IDLE;
+			}
+			break;
+		case TURN_WHITE_MOVE:
 			break;
 		}
 		BeginDrawing();
