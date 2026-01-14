@@ -80,12 +80,12 @@ enum Turn {
 	TURN_WHITE_MOVE = 3
 };
 
-#define MARK_COLOR_BASIC ((Color) {0x55, 0x31, 0x11, 0xFF})
-#define MARK_COLOR_MOUSEON SKYBLUE
-#define MARK_COLOR_MOUSEDOWN DARKBLUE
-#define MARK_COLOR_SELECTED BLUE
-#define MARK_COLOR_LEGAL GREEN
-#define MARK_COLOR_ILLEGAL RED
+#define COLOR_MARK_BASIC ((Color) {0x55, 0x31, 0x11, 0xFF})
+#define COLOR_MARK_MOUSEON SKYBLUE
+#define COLOR_MARK_MOUSEDOWN DARKBLUE
+#define COLOR_MARK_SELECTED BLUE
+#define COLOR_MARK_LEGAL GREEN
+#define COLOR_MARK_ILLEGAL RED
 
 // Assumes 24 space board
 void updateMarkPosition(struct BoardMark *markArray)
@@ -137,12 +137,12 @@ int main(void)
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
 	struct BoardMark markings[24];
 	Color statusColor[6];
-	statusColor[MARK_IDLE] = MARK_COLOR_BASIC;
-	statusColor[MARK_MOUSEON] = MARK_COLOR_MOUSEON;
-	statusColor[MARK_MOUSEDOWN] = MARK_COLOR_MOUSEDOWN;
-	statusColor[MARK_SELECTED] = MARK_COLOR_SELECTED;
-	statusColor[MARK_LEGAL] = MARK_COLOR_LEGAL;
-	statusColor[MARK_ILLEGAL] = MARK_COLOR_ILLEGAL;
+	statusColor[MARK_IDLE] = COLOR_MARK_BASIC;
+	statusColor[MARK_MOUSEON] = COLOR_MARK_MOUSEON;
+	statusColor[MARK_MOUSEDOWN] = COLOR_MARK_MOUSEDOWN;
+	statusColor[MARK_SELECTED] = COLOR_MARK_SELECTED;
+	statusColor[MARK_LEGAL] = COLOR_MARK_LEGAL;
+	statusColor[MARK_ILLEGAL] = COLOR_MARK_ILLEGAL;
 	updateMarkPosition(markings);
 	unsigned char dieA, dieB;
 	enum Turn currentTurn = 0;
