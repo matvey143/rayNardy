@@ -171,8 +171,21 @@ int main(void)
 			}
 			break;
 		case TURN_BLACK_MOVE:
-			// First die check
-			// Second die check
+			int dieAPos = selectedMark - dieA, dieBPos = selectedMark - dieB;
+			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+				// Die 1
+				if (CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
+					board[selectedMark]++;
+					board[dieAPos]--;
+					// TODO: Placeholder
+				}
+				// Die 2
+				if (CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
+					board[selectedMark]++;
+					board[dieBPos]--;
+					// TODO: Placeholder
+				}
+			}
 			break;
 		case TURN_WHITE_SELECT:
 			for (int i = 0; i < 24; i++) {
