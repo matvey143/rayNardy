@@ -215,7 +215,7 @@ int main(void)
 						markings[i].status = MARK_SELECTED;
 						selectedMark = i;
 						if (board[i + dieA] < 0) markings[i + dieA].status = MARK_ILLEGAL;
-						else markings[i - dieA].status = MARK_LEGAL;
+						else markings[i + dieA].status = MARK_LEGAL;
 						if (board[i + dieB] < 0) markings[i + dieB].status = MARK_ILLEGAL;
 						else markings[i + dieB].status = MARK_LEGAL;
 						break;
