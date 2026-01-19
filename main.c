@@ -121,6 +121,15 @@ void updateMarkPosition(struct BoardMark *markArray)
 	}
 }
 // TODO: need to do function for white piece movement.
+signed char GetMarkInfoWhite(signed char *board, unsigned char die, int position)
+{
+	if (position - die > 0) {
+		return board[position - die];
+	}
+	else {
+		return board[11 - (position - die)];
+	}
+}
 
 int main(void)
 {
@@ -181,7 +190,8 @@ int main(void)
 			dieAPos = selectedMark - dieA, dieBPos = selectedMark - dieB;
 			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 				// Die 1
-				if (dieA && CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
+				if (dieA && markings[dieAPos].status == MARK_LEGAL &&
+						CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
 					board[selectedMark]++;
 					board[dieAPos]--;
 					dieA = 0;
@@ -191,10 +201,18 @@ int main(void)
 					currentTurn = TURN_BLACK_SELECT;
 				}
 				// Die 2
-				if (dieB && CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
+				else if (dieB && markings[dieBPos].status == MARK_LEGAL &&
+						CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
 					board[selectedMark]++;
 					board[dieBPos]--;
 					dieB = 0;
+					markings[selectedMark].status = MARK_IDLE;
+					markings[dieAPos].status = MARK_IDLE;
+					markings[dieBPos].status = MARK_IDLE;
+					currentTurn = TURN_BLACK_SELECT;
+				}
+				// Cancel movement phase
+				else {
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
 					markings[dieBPos].status = MARK_IDLE;
@@ -230,7 +248,8 @@ int main(void)
 			dieAPos = selectedMark + dieA, dieBPos = selectedMark + dieB;
 			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 				// Die 1
-				if (dieA && CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
+				if (dieA && markings[dieAPos].status == MARK_LEGAL &&
+						CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
 					board[selectedMark]--;
 					board[dieAPos]++;
 					dieA = 0;
@@ -240,10 +259,17 @@ int main(void)
 					currentTurn = TURN_WHITE_SELECT;
 				}
 				// Die 2
-				if (dieB && CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
+				else if (dieB && markings[dieBPos].status == MARK_LEGAL &&
+						CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
 					board[selectedMark]--;
 					board[dieBPos]++;
 					dieB = 0;
+					markings[selectedMark].status = MARK_IDLE;
+					markings[dieAPos].status = MARK_IDLE;
+					markings[dieBPos].status = MARK_IDLE;
+					currentTurn = TURN_WHITE_SELECT;
+				}
+				else {
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
 					markings[dieBPos].status = MARK_IDLE;
