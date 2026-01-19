@@ -120,6 +120,7 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[17 - i].status = MARK_IDLE;
 	}
 }
+// TODO: need to do function for white piece movement.
 
 int main(void)
 {
