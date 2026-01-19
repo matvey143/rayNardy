@@ -145,6 +145,7 @@ int main(void)
 	statusColor[MARK_ILLEGAL] = COLOR_MARK_ILLEGAL;
 	updateMarkPosition(markings);
 	unsigned char dieA, dieB;
+	int dieAPos, dieBPos;
 	int selectedMark;
 	enum Turn currentTurn = 0;
 	ThrowDice(&dieA, &dieB);
@@ -152,6 +153,11 @@ int main(void)
 		Vector2 mouseXY = GetMousePosition();
 		switch (currentTurn) {
 		case TURN_BLACK_SELECT:
+			if (!dieA && !dieB) {
+				currentTurn = TURN_WHITE_SELECT;
+				ThrowDice(&dieA, &dieB);
+				break;
+			}
 			for (int i = 0; i < 24; i++) {
 				if (board[i] < 0 &&	CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
 					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
@@ -171,23 +177,36 @@ int main(void)
 			}
 			break;
 		case TURN_BLACK_MOVE:
-			int dieAPos = selectedMark - dieA, dieBPos = selectedMark - dieB;
+			dieAPos = selectedMark - dieA, dieBPos = selectedMark - dieB;
 			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 				// Die 1
-				if (CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
+				if (dieA && CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
 					board[selectedMark]++;
 					board[dieAPos]--;
-					// TODO: Placeholder
+					dieA = 0;
+					markings[selectedMark].status = MARK_IDLE;
+					markings[dieAPos].status = MARK_IDLE;
+					markings[dieBPos].status = MARK_IDLE;
+					currentTurn = TURN_BLACK_SELECT;
 				}
 				// Die 2
-				if (CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
+				if (dieB && CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
 					board[selectedMark]++;
 					board[dieBPos]--;
-					// TODO: Placeholder
+					dieB = 0;
+					markings[selectedMark].status = MARK_IDLE;
+					markings[dieAPos].status = MARK_IDLE;
+					markings[dieBPos].status = MARK_IDLE;
+					currentTurn = TURN_BLACK_SELECT;
 				}
 			}
 			break;
 		case TURN_WHITE_SELECT:
+			if (!dieA && !dieB) {
+				currentTurn = TURN_BLACK_SELECT;
+				ThrowDice(&dieA, &dieB);
+				break;
+			}
 			for (int i = 0; i < 24; i++) {
 				if (board[i] > 0 &&	CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
 					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
@@ -207,6 +226,29 @@ int main(void)
 			}
 			break;
 		case TURN_WHITE_MOVE:
+			dieAPos = selectedMark + dieA, dieBPos = selectedMark + dieB;
+			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+				// Die 1
+				if (dieA && CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
+					board[selectedMark]--;
+					board[dieAPos]++;
+					dieA = 0;
+					markings[selectedMark].status = MARK_IDLE;
+					markings[dieAPos].status = MARK_IDLE;
+					markings[dieBPos].status = MARK_IDLE;
+					currentTurn = TURN_WHITE_SELECT;
+				}
+				// Die 2
+				if (dieB && CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
+					board[selectedMark]--;
+					board[dieBPos]++;
+					dieB = 0;
+					markings[selectedMark].status = MARK_IDLE;
+					markings[dieAPos].status = MARK_IDLE;
+					markings[dieBPos].status = MARK_IDLE;
+					currentTurn = TURN_WHITE_SELECT;
+				}
+			}
 			break;
 		}
 		BeginDrawing();
