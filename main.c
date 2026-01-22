@@ -171,10 +171,14 @@ int main(void)
 						currentTurn = TURN_BLACK_MOVE;
 						markings[i].status = MARK_SELECTED;
 						selectedMark = i;
-						if (board[i - dieA] > 0) markings[i - dieA].status = MARK_ILLEGAL;
-						else markings[i - dieA].status = MARK_LEGAL;
-						if (board[i - dieB] > 0) markings[i - dieB].status = MARK_ILLEGAL;
-						else markings[i - dieB].status = MARK_LEGAL;
+						if (dieA != 0) {
+							if (board[i - dieA] > 0) markings[i - dieA].status = MARK_ILLEGAL;
+							else markings[i - dieA].status = MARK_LEGAL;
+						}
+						if (dieB != 0) {
+							if (board[i - dieB] > 0) markings[i - dieB].status = MARK_ILLEGAL;
+							else markings[i - dieB].status = MARK_LEGAL;
+						}
 						break;
 					}
 					else markings[i].status = MARK_MOUSEON; // Mouse on
@@ -230,10 +234,14 @@ int main(void)
 						currentTurn = TURN_WHITE_MOVE;
 						markings[i].status = MARK_SELECTED;
 						selectedMark = i;
-						if (board[WhiteOffset(dieA, i)] < 0) markings[dieAPos].status = MARK_ILLEGAL;
-						else markings[dieAPos].status = MARK_LEGAL;
-						if (board[dieBPos] < 0) markings[dieBPos].status = MARK_ILLEGAL;
-						else markings[dieBPos].status = MARK_LEGAL;
+						if (dieA != 0) {
+							if (board[WhiteOffset(dieA, i)] < 0) markings[dieAPos].status = MARK_ILLEGAL;
+							else markings[dieAPos].status = MARK_LEGAL;
+						}
+						if (dieB != 0) {
+							if (board[dieBPos] < 0) markings[dieBPos].status = MARK_ILLEGAL;
+							else markings[dieBPos].status = MARK_LEGAL;
+						}
 						break;
 					}
 					else markings[i].status = MARK_MOUSEON; // Mouse on
