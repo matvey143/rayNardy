@@ -120,15 +120,11 @@ void updateMarkPosition(struct BoardMark *markArray)
 		markArray[17 - i].status = MARK_IDLE;
 	}
 }
-// TODO: need to do function for white piece movement.
-signed char GetMarkInfoWhite(signed char *board, unsigned char die, int position)
+
+int WhiteOffset(unsigned char die, int position)
 {
-	if (position - die > 0) {
-		return board[position - die];
-	}
-	else {
-		return board[11 - (position - die)];
-	}
+	if (position - die > 0) return position - die;
+	else return 11 - (position - die);
 }
 
 int main(void)
