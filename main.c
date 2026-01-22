@@ -28,7 +28,7 @@ void DrawDice(unsigned char value, Rectangle dice)
 		break;
 	case 3:
 		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f, dotRadius, BLACK); // Middle
+		DrawCircle(dice.x + dice.width * 0.5f , dice.y + dice.height * 0.5f , dotRadius, BLACK); // Middle
 		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	case 4:
@@ -40,16 +40,16 @@ void DrawDice(unsigned char value, Rectangle dice)
 	case 5:
 		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
 		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Right
-		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f,	dotRadius, BLACK); // Middle
+		DrawCircle(dice.x + dice.width * 0.5f , dice.y + dice.height * 0.5f , dotRadius, BLACK); // Middle
 		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-left
 		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	case 6:
 		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Mid
+		DrawCircle(dice.x + dice.width * 0.5f , dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Mid
 		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Right
 		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-left
-		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-mid
+		DrawCircle(dice.x + dice.width * 0.5f , dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-mid
 		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	default:
