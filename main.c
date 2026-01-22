@@ -124,7 +124,7 @@ void updateMarkPosition(struct BoardMark *markArray)
 int WhiteOffset(unsigned char die, int position)
 {
 	if (position - die > 0) return position - die;
-	else return 11 - (position - die);
+	else return 24 + (position - die);
 }
 
 int main(void)
@@ -226,13 +226,14 @@ int main(void)
 				if (board[i] > 0 &&	CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
 					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
 					else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+						dieAPos = WhiteOffset(dieA, i), dieBPos = WhiteOffset(dieB, i);
 						currentTurn = TURN_WHITE_MOVE;
 						markings[i].status = MARK_SELECTED;
 						selectedMark = i;
-						if (board[i + dieA] < 0) markings[i + dieA].status = MARK_ILLEGAL;
-						else markings[i + dieA].status = MARK_LEGAL;
-						if (board[i + dieB] < 0) markings[i + dieB].status = MARK_ILLEGAL;
-						else markings[i + dieB].status = MARK_LEGAL;
+						if (board[WhiteOffset(dieA, i)] < 0) markings[dieAPos].status = MARK_ILLEGAL;
+						else markings[dieAPos].status = MARK_LEGAL;
+						if (board[dieBPos] < 0) markings[dieBPos].status = MARK_ILLEGAL;
+						else markings[dieBPos].status = MARK_LEGAL;
 						break;
 					}
 					else markings[i].status = MARK_MOUSEON; // Mouse on
@@ -241,7 +242,6 @@ int main(void)
 			}
 			break;
 		case TURN_WHITE_MOVE:
-			dieAPos = selectedMark + dieA, dieBPos = selectedMark + dieB;
 			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 				// Die 1
 				if (dieA && markings[dieAPos].status == MARK_LEGAL &&
