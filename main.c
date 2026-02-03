@@ -316,6 +316,15 @@ int main(void)
 			DrawRectangle(WINDOW_H, 0, WINDOW_W - WINDOW_H, WINDOW_H, GRAY);
 			int titlePad = (WINDOW_W - WINDOW_H - MeasureText("Nardy", 32)) / 2;
 			DrawText("Nardy", WINDOW_H + titlePad, 0, 32, BLACK);
+			int turnPad;
+			if (currentTurn < TURN_WHITE_SELECT) { // Black turn
+				turnPad = (WINDOW_W - WINDOW_H - MeasureText("Black turn", 24)) / 2;
+				DrawText("Black turn", WINDOW_H + turnPad, 120, 24, BLACK);
+			}
+			else {
+				turnPad = (WINDOW_W - WINDOW_H - MeasureText("Black turn", 24)) / 2;
+				DrawText("Black turn", WINDOW_H + turnPad, 120, 24, BLACK);
+			}
 			// Dice
 			Rectangle dieLeft = {500.0f, 50.0f, 50.0f, 50.0f};
 			Rectangle dieRight = {570.0f, 50.0f, 50.0f, 50.0f};
