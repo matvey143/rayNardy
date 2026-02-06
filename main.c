@@ -1,3 +1,8 @@
+// TODO: prevent white pieces from looping;
+// TODO: implement minor rules;
+// TODO: implement aborting turns when no move is possible;
+// TODO: implement win condition;
+// TODO: implement window resizing;
 #include <stdlib.h>
 #include <time.h>
 #include "raylib.h"
@@ -24,7 +29,7 @@ void DrawDice(unsigned char value, Rectangle dice)
 	const float dotRadius = 4.0f;
 	switch (value & 0b1111) {
 	case 1:
-		DrawCircle(dice.x + dice.width * 0.5f, dice.y + dice.height * 0.5f, dotRadius, BLACK);
+		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.50f, dotRadius, BLACK);
 		break;
 	case 2:
 		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
@@ -32,7 +37,7 @@ void DrawDice(unsigned char value, Rectangle dice)
 		break;
 	case 3:
 		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.5f , dice.y + dice.height * 0.5f , dotRadius, BLACK); // Middle
+		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.50f, dotRadius, BLACK); // Middle
 		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	case 4:
@@ -44,16 +49,16 @@ void DrawDice(unsigned char value, Rectangle dice)
 	case 5:
 		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
 		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Right
-		DrawCircle(dice.x + dice.width * 0.5f , dice.y + dice.height * 0.5f , dotRadius, BLACK); // Middle
+		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.50f, dotRadius, BLACK); // Middle
 		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-left
 		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	case 6:
 		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.5f , dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Mid
+		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Mid
 		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Right
 		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-left
-		DrawCircle(dice.x + dice.width * 0.5f , dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-mid
+		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-mid
 		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	default:
@@ -308,7 +313,6 @@ int main(void)
 					else  y -= pieceRadius;
 					Color pieceColor = board[i] > 0 ? WHITE : BLACK;
 					for (int j = 0; j < abs(board[i]); j++) {
-						//int y = PADDING + pieceRadius + pieceRadius * 2 * j;
 						DrawCircle(x, y, pieceRadius, pieceColor);
 						DrawCircleLines(x, y, pieceRadius, DARKGRAY);
 						if (i < 12) y += pieceRadius * 2;
