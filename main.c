@@ -322,8 +322,8 @@ int main(void)
 				DrawText("Black turn", WINDOW_H + turnPad, 120, 24, BLACK);
 			}
 			else {
-				turnPad = (WINDOW_W - WINDOW_H - MeasureText("Black turn", 24)) / 2;
-				DrawText("Black turn", WINDOW_H + turnPad, 120, 24, BLACK);
+				turnPad = (WINDOW_W - WINDOW_H - MeasureText("White turn", 24)) / 2;
+				DrawText("White turn", WINDOW_H + turnPad, 120, 24, BLACK);
 			}
 			// Dice
 			Rectangle dieLeft = {500.0f, 50.0f, 50.0f, 50.0f};
