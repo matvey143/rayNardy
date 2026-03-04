@@ -135,9 +135,14 @@ int WhiteOffset(unsigned char die, int position)
 	else return 24 + (position - die);
 }
 
-bool LegalMoveCheck(enum Turn turn, unsigned char dieA, unsigned char dieB)
+bool LegalMoveCheckBlack(signed char *board, unsigned char dieA, unsigned char dieB)
 {
-	return true;
+	return false;
+}
+
+bool LegalMoveCheckWhite(signed char *board, unsigned char dieA, unsigned char dieB)
+{
+	return false;
 }
 
 int main(void)
@@ -155,6 +160,8 @@ int main(void)
 	signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
 	struct BoardMark markings[24];
+	// Now when I thought about it, making board and markings separate arrays was a stupid decision.
+	// TODO: refactor this.
 	Color statusColor[6];
 	statusColor[MARK_IDLE] = COLOR_MARK_BASIC;
 	statusColor[MARK_MOUSEON] = COLOR_MARK_MOUSEON;
@@ -247,7 +254,7 @@ int main(void)
 						currentTurn = TURN_WHITE_MOVE;
 						markings[i].status = MARK_SELECTED;
 						selectedMark = i;
-						if (dieA != 0 && !(i > 12 && (i - dieA) < 12)) { // Second part is needed to ensure white pieces don't loop.
+						if (dieA != 0 && !(i > 12 && (i - dieA) < 12)) { //Second part is needed to ensure white pieces don't loop.
 							if (board[dieAPos] < 0) markings[dieAPos].status = MARK_ILLEGAL;
 							else markings[dieAPos].status = MARK_LEGAL;
 						}
