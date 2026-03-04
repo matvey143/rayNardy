@@ -158,16 +158,12 @@ int main(void)
 	(   )( )( )( )( )( )( )( )( )( )( )(15W)
 	(15b)( )( )( )( )( )( )( )( )( )( )(   )
 	*/
-	//signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
-	//			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
 	struct BoardMark markings[24];
 	for (int i = 0; i < 24; i++) {
 		markings[i].pieces = 0;
 	}
 	markings[11].pieces = 15;
 	markings[23].pieces = -15;
-	// Now when I thought about it, making board and markings separate arrays was a stupid decision.
-	// TODO: refactor this.
 	Color statusColor[6];
 	statusColor[MARK_IDLE] = COLOR_MARK_BASIC;
 	statusColor[MARK_MOUSEON] = COLOR_MARK_MOUSEON;
