@@ -78,6 +78,7 @@ struct BoardMark {
 	Vector2 v1;
 	Vector2 v2;
 	Vector2 v3;
+	signed char pieces; // Negative value - black pieces, positive - white, zero - unoccupied.
 	enum MarkStatus status;
 };
 
@@ -157,9 +158,14 @@ int main(void)
 	(   )( )( )( )( )( )( )( )( )( )( )(15W)
 	(15b)( )( )( )( )( )( )( )( )( )( )(   )
 	*/
-	signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
+	//signed char board[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15,
+	//			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15};
 	struct BoardMark markings[24];
+	for (int i = 0; i < 24; i++) {
+		markings[i].pieces = 0;
+	}
+	markings[11].pieces = 15;
+	markings[23].pieces = -15;
 	// Now when I thought about it, making board and markings separate arrays was a stupid decision.
 	// TODO: refactor this.
 	Color statusColor[6];
@@ -185,18 +191,18 @@ int main(void)
 				break;
 			}
 			for (int i = 0; i < 24; i++) {
-				if (board[i] < 0 &&	CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
+				if (markings[i].pieces < 0 && CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
 					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
 					else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 						currentTurn = TURN_BLACK_MOVE;
 						markings[i].status = MARK_SELECTED;
 						selectedMark = i;
 						if (dieA != 0) {
-							if (board[i - (dieA & 0b1111)] > 0) markings[i - (dieA & 0b1111)].status = MARK_ILLEGAL;
+							if (markings[i - (dieA & 0b1111)].pieces > 0) markings[i - (dieA & 0b1111)].status = MARK_ILLEGAL;
 							else markings[i - (dieA & 0b1111)].status = MARK_LEGAL;
 						}
 						if (dieB != 0) {
-							if (board[i - (dieB & 0b1111)] > 0) markings[i - (dieB & 0b1111)].status = MARK_ILLEGAL;
+							if (markings[i - (dieB & 0b1111)].pieces > 0) markings[i - (dieB & 0b1111)].status = MARK_ILLEGAL;
 							else markings[i - (dieB & 0b1111)].status = MARK_LEGAL;
 						}
 						break;
@@ -212,8 +218,8 @@ int main(void)
 				// Die 1
 				if (dieA && markings[dieAPos].status == MARK_LEGAL &&
 						CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
-					board[selectedMark]++;
-					board[dieAPos]--;
+					markings[selectedMark].pieces++;
+					markings[dieAPos].pieces--;
 					dieA >>= 4;
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
@@ -223,8 +229,8 @@ int main(void)
 				// Die 2
 				else if (dieB && markings[dieBPos].status == MARK_LEGAL &&
 						CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
-					board[selectedMark]++;
-					board[dieBPos]--;
+					markings[selectedMark].pieces++;
+					markings[dieBPos].pieces--;
 					dieB >>= 4;
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
@@ -247,7 +253,7 @@ int main(void)
 				break;
 			}
 			for (int i = 0; i < 24; i++) {
-				if (board[i] > 0 &&	CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
+				if (markings[i].pieces > 0 && CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
 					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
 					else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 						dieAPos = WhiteOffset(dieA & 0b1111, i), dieBPos = WhiteOffset(dieB & 0b1111, i);
@@ -255,11 +261,11 @@ int main(void)
 						markings[i].status = MARK_SELECTED;
 						selectedMark = i;
 						if (dieA != 0 && !(i > 12 && (i - dieA) < 12)) { //Second part is needed to ensure white pieces don't loop.
-							if (board[dieAPos] < 0) markings[dieAPos].status = MARK_ILLEGAL;
+							if (markings[dieAPos].pieces < 0) markings[dieAPos].status = MARK_ILLEGAL;
 							else markings[dieAPos].status = MARK_LEGAL;
 						}
 						if (dieB != 0 && !(i > 12 && (i - dieB) < 12)) {
-							if (board[dieBPos] < 0) markings[dieBPos].status = MARK_ILLEGAL;
+							if (markings[dieBPos].pieces < 0) markings[dieBPos].status = MARK_ILLEGAL;
 							else markings[dieBPos].status = MARK_LEGAL;
 						}
 						break;
@@ -274,8 +280,8 @@ int main(void)
 				// Die 1
 				if (dieA && markings[dieAPos].status == MARK_LEGAL &&
 						CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
-					board[selectedMark]--;
-					board[dieAPos]++;
+					markings[selectedMark].pieces--;
+					markings[dieAPos].pieces++;
 					dieA >>= 4;
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
@@ -285,8 +291,8 @@ int main(void)
 				// Die 2
 				else if (dieB && markings[dieBPos].status == MARK_LEGAL &&
 						CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
-					board[selectedMark]--;
-					board[dieBPos]++;
+					markings[selectedMark].pieces--;
+					markings[dieBPos].pieces++;
 					dieB >>= 4;
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
@@ -316,14 +322,14 @@ int main(void)
 				// Top
 				DrawTriangle(markings[i].v1, markings[i].v2, markings[i].v3, statusColor[markings[i].status]);
 				// Drawing pieces
-				if (board[i] != 0) {
+				if (markings[i].pieces != 0) {
 					float pieceRadius = 6.0f;
 					int x = (int) markings[i].v2.x;
 					int y = (int) markings[i].v1.y;
 					if (i < 12) y += pieceRadius;
 					else  y -= pieceRadius;
-					Color pieceColor = board[i] > 0 ? WHITE : BLACK;
-					for (int j = 0; j < abs(board[i]); j++) {
+					Color pieceColor = markings[i].pieces > 0 ? WHITE : BLACK;
+					for (int j = 0; j < abs(markings[i].pieces); j++) {
 						DrawCircle(x, y, pieceRadius, pieceColor);
 						DrawCircleLines(x, y, pieceRadius, DARKGRAY);
 						if (i < 12) y += pieceRadius * 2;
