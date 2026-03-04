@@ -1,4 +1,3 @@
-// TODO: prevent white pieces from looping;
 // TODO: implement minor rules;
 // TODO: implement aborting turns when no move is possible;
 // TODO: implement win condition;
@@ -134,6 +133,11 @@ int WhiteOffset(unsigned char die, int position)
 {
 	if (position - die > 0) return position - die;
 	else return 24 + (position - die);
+}
+
+bool LegalMoveCheck(enum Turn turn, unsigned char dieA, unsigned char dieB)
+{
+	return true;
 }
 
 int main(void)
