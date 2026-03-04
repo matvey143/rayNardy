@@ -243,11 +243,11 @@ int main(void)
 						currentTurn = TURN_WHITE_MOVE;
 						markings[i].status = MARK_SELECTED;
 						selectedMark = i;
-						if (dieA != 0) {
+						if (dieA != 0 && !(i > 12 && (i - dieA) < 12)) { // Second part is needed to ensure white pieces don't loop.
 							if (board[dieAPos] < 0) markings[dieAPos].status = MARK_ILLEGAL;
 							else markings[dieAPos].status = MARK_LEGAL;
 						}
-						if (dieB != 0) {
+						if (dieB != 0 && !(i > 12 && (i - dieB) < 12)) {
 							if (board[dieBPos] < 0) markings[dieBPos].status = MARK_ILLEGAL;
 							else markings[dieBPos].status = MARK_LEGAL;
 						}
