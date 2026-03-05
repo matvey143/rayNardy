@@ -130,14 +130,22 @@ void updateMarkPosition(struct BoardMark *markArray)
 	}
 }
 
+// Will be adjusted in future to account for endgame.
 int WhiteOffset(unsigned char die, int position)
 {
 	if (position - die > 0) return position - die;
 	else return 24 + (position - die);
 }
 
-bool LegalMoveCheckBlack(signed char *board, unsigned char dieA, unsigned char dieB)
+bool LegalMoveCheckBlack(struct BoardMark *board, unsigned char rawDieA, unsigned char rawDieB)
 {
+	unsigned int dieA = rawDieA & 0b1111, dieB = rawDieB & 0b1111;
+	for (int i = 0; i < 24; i++) {
+		if (board[i].pieces < 0 && board[i].status != MARK_ILLEGAL) {
+			if (i - dieA >= 0 && board[i - dieA].pieces <= 0) return true;
+			if (i - dieB >= 0 && board[i - dieB].pieces <= 0) return true;
+		}
+	}
 	return false;
 }
 
