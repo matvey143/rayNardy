@@ -142,15 +142,25 @@ bool LegalMoveCheckBlack(struct BoardMark *board, unsigned char rawDieA, unsigne
 	unsigned int dieA = rawDieA & 0b1111, dieB = rawDieB & 0b1111;
 	for (int i = 0; i < 24; i++) {
 		if (board[i].pieces < 0 && board[i].status != MARK_ILLEGAL) {
-			if (i - dieA >= 0 && board[i - dieA].pieces <= 0) return true;
-			if (i - dieB >= 0 && board[i - dieB].pieces <= 0) return true;
+			if (i - dieA >= 0 && board[i - dieA].pieces <= 0 && dieA != 0) return true;
+			if (i - dieB >= 0 && board[i - dieB].pieces <= 0 && dieB != 0) return true;
+			// Endgame checks will be here
 		}
 	}
 	return false;
 }
 
-bool LegalMoveCheckWhite(signed char *board, unsigned char dieA, unsigned char dieB)
+bool LegalMoveCheckWhite(struct BoardMark *board, unsigned char rawDieA, unsigned char rawDieB)
 {
+	unsigned int dieA = rawDieA & 0b1111, dieB = rawDieB & 0b1111;
+	for (int i = 0; i < 24; i++) {
+		if (board[i].pieces > 0 && board[i].status != MARK_ILLEGAL) {
+			int posA = WhiteOffset(dieA, i), posB = WhiteOffset(dieB, i);
+			if (dieA != 0 && !(i > 12 && (i - dieA) < 12) && board[posA].pieces >= 0) return true;
+			if (dieB != 0 && !(i > 12 && (i - dieB) < 12) && board[posB].pieces >= 0) return true;
+			// Endgame checks will be here.
+		}
+	}
 	return false;
 }
 
