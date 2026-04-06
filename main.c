@@ -139,6 +139,8 @@ int WhiteOffset(unsigned char die, int position)
 	else return 24 + (position - die);
 }
 
+// Legal move check should occur every time enum Turn is about to be set to select phase.
+// I am thinking of replacing these function with void functions that would intead modify Turn and abortTimer directly.
 bool LegalMoveCheckBlack(struct BoardMark *board, unsigned char rawDieA, unsigned char rawDieB)
 {
 	unsigned int dieA = rawDieA & 0b1111, dieB = rawDieB & 0b1111;
@@ -184,6 +186,7 @@ int main(void)
 	}
 	markings[11].pieces = 15;
 	markings[23].pieces = -15;
+
 	Color statusColor[6];
 	statusColor[MARK_IDLE] = COLOR_MARK_BASIC;
 	statusColor[MARK_MOUSEON] = COLOR_MARK_MOUSEON;
@@ -192,13 +195,18 @@ int main(void)
 	statusColor[MARK_LEGAL] = COLOR_MARK_LEGAL;
 	statusColor[MARK_ILLEGAL] = COLOR_MARK_ILLEGAL;
 	updateMarkPosition(markings);
+
 	unsigned char dieA, dieB;
 	int dieAPos, dieBPos;
+	ThrowDice(&dieA, &dieB);
+
 	int selectedMark;
 	enum Turn currentTurn = 0;
-	ThrowDice(&dieA, &dieB);
+
+	float abortTimer; // For banner, notifying that no turn is possible. After some time turn is passed.
 	while (!WindowShouldClose()) {
 		Vector2 mouseXY = GetMousePosition();
+		float frameTime = GetFrameTime();
 		switch (currentTurn) {
 		case TURN_BLACK_SELECT:
 			if (!dieA && !dieB) {
@@ -380,6 +388,11 @@ int main(void)
 			DrawRectangleRec(dieRight, WHITE);
 			DrawRectangleLinesEx(dieRight, 2.0f, BLACK);
 			DrawDice(dieB, dieRight);
+			if (currentTurn == TURN_WHITE_ABORTING) {
+				// Pop-up window will be here.
+			}
+			else if (TURN_BLACK_ABORTING) {
+			}
 		}
 		EndDrawing();
 	}
