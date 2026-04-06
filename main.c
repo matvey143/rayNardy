@@ -85,8 +85,10 @@ struct BoardMark {
 enum Turn {
 	TURN_BLACK_SELECT = 0, // For picking piece
 	TURN_BLACK_MOVE = 1,
-	TURN_WHITE_SELECT = 2,
-	TURN_WHITE_MOVE = 3
+	TURN_BLACK_ABORTING = 3, // No legal move is possible, passing turn.
+	TURN_WHITE_SELECT = 4,
+	TURN_WHITE_MOVE = 5,
+	TURN_WHITE_ABORTING = 6
 };
 
 #define COLOR_MARK_BASIC ((Color) {0x55, 0x31, 0x11, 0xFF})
@@ -260,6 +262,9 @@ int main(void)
 				}
 			}
 			break;
+		case TURN_BLACK_ABORTING:
+			// TODO: Finish
+			break;
 		case TURN_WHITE_SELECT:
 			if (!dieA && !dieB) {
 				currentTurn = TURN_BLACK_SELECT;
@@ -320,6 +325,8 @@ int main(void)
 					currentTurn = TURN_WHITE_SELECT;
 				}
 			}
+			break;
+		case TURN_WHITE_ABORTING:
 			break;
 		}
 		BeginDrawing();
