@@ -50,6 +50,9 @@ nardy
 *.idb
 *.pdb
 
+# Ctags
+tags
+
 # Kernel Module Compile Results
 *.mod*
 *.cmd
