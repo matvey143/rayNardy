@@ -140,7 +140,6 @@ int WhiteOffset(unsigned char die, int position)
 }
 
 // Legal move check should occur every time enum Turn is about to be set to select phase.
-// I am thinking of replacing these function with void functions that would intead modify Turn and abortTimer directly.
 bool LegalMoveCheckBlack(struct BoardMark *board, unsigned char rawDieA, unsigned char rawDieB)
 {
 	unsigned int dieA = rawDieA & 0b1111, dieB = rawDieB & 0b1111;
@@ -166,6 +165,19 @@ bool LegalMoveCheckWhite(struct BoardMark *board, unsigned char rawDieA, unsigne
 		}
 	}
 	return false;
+}
+
+void AbortTurn(float *timer, enum Turn *turn)
+{
+	const float resetTime = 1.0f;
+	if (*turn < TURN_WHITE_SELECT) {
+		*turn = TURN_BLACK_ABORTING;
+		*timer = resetTime;
+	}
+	else {
+		*turn = TURN_WHITE_ABORTING;
+		*timer = resetTime;
+	}
 }
 
 int main(void)
