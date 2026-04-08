@@ -211,7 +211,7 @@ int main(void)
 		switch (currentTurn) {
 		case TURN_BLACK_SELECT:
 			if (!dieA && !dieB) {
-				currentTurn = TURN_WHITE_SELECT;
+				currentTurn = TURN_WHITE_CHECKING;
 				ThrowDice(&dieA, &dieB);
 				break;
 			}
@@ -249,7 +249,7 @@ int main(void)
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
 					markings[dieBPos].status = MARK_IDLE;
-					currentTurn = TURN_BLACK_SELECT;
+					currentTurn = TURN_BLACK_CHECKING;
 				}
 				// Die 2
 				else if (dieB && markings[dieBPos].status == MARK_LEGAL &&
@@ -260,14 +260,14 @@ int main(void)
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
 					markings[dieBPos].status = MARK_IDLE;
-					currentTurn = TURN_BLACK_SELECT;
+					currentTurn = TURN_BLACK_CHECKING;
 				}
 				// Cancel movement phase
 				else {
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
 					markings[dieBPos].status = MARK_IDLE;
-					currentTurn = TURN_BLACK_SELECT;
+					currentTurn = TURN_BLACK_CHECKING;
 				}
 			}
 			break;
@@ -289,7 +289,7 @@ int main(void)
 			break;
 		case TURN_WHITE_SELECT:
 			if (!dieA && !dieB) {
-				currentTurn = TURN_BLACK_SELECT;
+				currentTurn = TURN_BLACK_CHECKING;
 				ThrowDice(&dieA, &dieB);
 				break;
 			}
@@ -327,7 +327,7 @@ int main(void)
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
 					markings[dieBPos].status = MARK_IDLE;
-					currentTurn = TURN_WHITE_SELECT;
+					currentTurn = TURN_WHITE_CHECKING;
 				}
 				// Die 2
 				else if (dieB && markings[dieBPos].status == MARK_LEGAL &&
@@ -338,13 +338,13 @@ int main(void)
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
 					markings[dieBPos].status = MARK_IDLE;
-					currentTurn = TURN_WHITE_SELECT;
+					currentTurn = TURN_WHITE_CHECKING;
 				}
 				else {
 					markings[selectedMark].status = MARK_IDLE;
 					markings[dieAPos].status = MARK_IDLE;
 					markings[dieBPos].status = MARK_IDLE;
-					currentTurn = TURN_WHITE_SELECT;
+					currentTurn = TURN_WHITE_CHECKING;
 				}
 			}
 			break;
