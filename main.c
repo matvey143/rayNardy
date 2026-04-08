@@ -416,10 +416,8 @@ int main(void)
 			DrawRectangleRec(dieRight, WHITE);
 			DrawRectangleLinesEx(dieRight, 2.0f, BLACK);
 			DrawDice(dieB, dieRight);
-			if (currentTurn == TURN_WHITE_ABORTING) {
+			if (currentTurn == TURN_WHITE_ABORTING || currentTurn == TURN_BLACK_ABORTING) {
 				// Pop-up window will be here.
-			}
-			else if (TURN_BLACK_ABORTING) {
 			}
 		}
 		EndDrawing();
