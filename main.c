@@ -85,10 +85,12 @@ struct BoardMark {
 enum Turn {
 	TURN_BLACK_SELECT = 0, // For picking piece
 	TURN_BLACK_MOVE = 1,
+	TURN_BLACK_CHECKING = 2,
 	TURN_BLACK_ABORTING = 3, // No legal move is possible, passing turn.
 	TURN_WHITE_SELECT = 4,
 	TURN_WHITE_MOVE = 5,
-	TURN_WHITE_ABORTING = 6
+	TURN_WHITE_CHECKING = 6,
+	TURN_WHITE_ABORTING = 7
 };
 
 #define COLOR_MARK_BASIC ((Color) {0x55, 0x31, 0x11, 0xFF})
@@ -165,19 +167,6 @@ bool LegalMoveCheckWhite(struct BoardMark *board, unsigned char rawDieA, unsigne
 		}
 	}
 	return false;
-}
-
-void AbortTurn(float *timer, enum Turn *turn)
-{
-	const float resetTime = 1.0f;
-	if (*turn < TURN_WHITE_SELECT) {
-		*turn = TURN_BLACK_ABORTING;
-		*timer = resetTime;
-	}
-	else {
-		*turn = TURN_WHITE_ABORTING;
-		*timer = resetTime;
-	}
 }
 
 int main(void)
@@ -282,8 +271,21 @@ int main(void)
 				}
 			}
 			break;
+		case TURN_BLACK_CHECKING:
+			if (LegalMoveCheckBlack(markings, dieA, dieB))
+				currentTurn = TURN_BLACK_SELECT;
+			else {
+				const float resetTime = 1.0f;
+				abortTimer = resetTime;
+				currentTurn = TURN_BLACK_ABORTING;
+			}
+			break;
 		case TURN_BLACK_ABORTING:
-			// TODO: Finish
+			abortTimer -= frameTime;
+			if (abortTimer <= 0.0f) {
+				ThrowDice(&dieA, &dieB);
+				currentTurn = TURN_WHITE_CHECKING;
+			}
 			break;
 		case TURN_WHITE_SELECT:
 			if (!dieA && !dieB) {
@@ -346,7 +348,21 @@ int main(void)
 				}
 			}
 			break;
+		case TURN_WHITE_CHECKING:
+			if (LegalMoveCheckWhite(markings, dieA, dieB))
+				currentTurn = TURN_WHITE_SELECT;
+			else {
+				const float resetTime = 1.0f;
+				abortTimer = resetTime;
+				currentTurn = TURN_WHITE_ABORTING;
+			}
+			break;
 		case TURN_WHITE_ABORTING:
+			abortTimer -= frameTime;
+			if (abortTimer <= 0.0f) {
+				ThrowDice(&dieA, &dieB);
+				currentTurn = TURN_BLACK_CHECKING;
+			}
 			break;
 		}
 		BeginDrawing();
