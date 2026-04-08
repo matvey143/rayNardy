@@ -418,6 +418,13 @@ int main(void)
 			DrawDice(dieB, dieRight);
 			if (currentTurn == TURN_WHITE_ABORTING || currentTurn == TURN_BLACK_ABORTING) {
 				// Pop-up window will be here.
+				int boxX = WINDOW_W / 4, boxY = WINDOW_H / 4;
+				int boxW = WINDOW_W / 2, boxH = WINDOW_H / 2;
+				DrawRectangle(boxX, boxY, boxW, boxH, RED);
+				int messagePad = (boxX - MeasureText("Passing turn", 32)) / 2;
+				DrawText("Passing turn", boxX + messagePad, boxY + 40, 32, YELLOW);
+				int messagePad2 = (boxX - MeasureText("No legal move is possible.", 24)) / 2;
+				DrawText("No legal move is possible.", boxX + messagePad2, boxY + 80, 24, WHITE);
 			}
 		}
 		EndDrawing();
