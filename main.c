@@ -181,12 +181,12 @@ int main(void)
 	(   )( )( )( )( )( )( )( )( )( )( )(15W)
 	(15b)( )( )( )( )( )( )( )( )( )( )(   )
 	*/
-	struct BoardMark markings[24];
+	struct BoardMark board[24];
 	for (int i = 0; i < 24; i++) {
-		markings[i].pieces = 0;
+		board[i].pieces = 0;
 	}
-	markings[11].pieces = 15;
-	markings[23].pieces = -15;
+	board[11].pieces = 15;
+	board[23].pieces = -15;
 
 	Color statusColor[6];
 	statusColor[MARK_IDLE] = COLOR_MARK_BASIC;
@@ -195,7 +195,7 @@ int main(void)
 	statusColor[MARK_SELECTED] = COLOR_MARK_SELECTED;
 	statusColor[MARK_LEGAL] = COLOR_MARK_LEGAL;
 	statusColor[MARK_ILLEGAL] = COLOR_MARK_ILLEGAL;
-	updateMarkPosition(markings);
+	updateMarkPosition(board);
 
 	unsigned char dieA, dieB;
 	int dieAPos, dieBPos;
@@ -216,63 +216,63 @@ int main(void)
 				break;
 			}
 			for (int i = 0; i < 24; i++) {
-				if (markings[i].pieces < 0 && CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
-					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
+				if (board[i].pieces < 0 && CheckCollisionPointTriangle(mouseXY, board[i].v1, board[i].v2, board[i].v3)) {
+					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) board[i].status = MARK_MOUSEDOWN;
 					else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 						currentTurn = TURN_BLACK_MOVE;
-						markings[i].status = MARK_SELECTED;
+						board[i].status = MARK_SELECTED;
 						selectedMark = i;
 						if (dieA != 0) {
-							if (markings[i - (dieA & 0b1111)].pieces > 0) markings[i - (dieA & 0b1111)].status = MARK_ILLEGAL;
-							else markings[i - (dieA & 0b1111)].status = MARK_LEGAL;
+							if (board[i - (dieA & 0b1111)].pieces > 0) board[i - (dieA & 0b1111)].status = MARK_ILLEGAL;
+							else board[i - (dieA & 0b1111)].status = MARK_LEGAL;
 						}
 						if (dieB != 0) {
-							if (markings[i - (dieB & 0b1111)].pieces > 0) markings[i - (dieB & 0b1111)].status = MARK_ILLEGAL;
-							else markings[i - (dieB & 0b1111)].status = MARK_LEGAL;
+							if (board[i - (dieB & 0b1111)].pieces > 0) board[i - (dieB & 0b1111)].status = MARK_ILLEGAL;
+							else board[i - (dieB & 0b1111)].status = MARK_LEGAL;
 						}
 						break;
 					}
-					else markings[i].status = MARK_MOUSEON; // Mouse on
+					else board[i].status = MARK_MOUSEON; // Mouse on
 				}
-				else markings[i].status = MARK_IDLE;
+				else board[i].status = MARK_IDLE;
 			}
 			break;
 		case TURN_BLACK_MOVE:
 			dieAPos = selectedMark - (dieA & 0b1111), dieBPos = selectedMark - (dieB & 0b1111);
 			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 				// Die 1
-				if (dieA && markings[dieAPos].status == MARK_LEGAL &&
-						CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
-					markings[selectedMark].pieces++;
-					markings[dieAPos].pieces--;
+				if (dieA && board[dieAPos].status == MARK_LEGAL &&
+						CheckCollisionPointTriangle(mouseXY, board[dieAPos].v1, board[dieAPos].v2, board[dieAPos].v3)) {
+					board[selectedMark].pieces++;
+					board[dieAPos].pieces--;
 					dieA >>= 4;
-					markings[selectedMark].status = MARK_IDLE;
-					markings[dieAPos].status = MARK_IDLE;
-					markings[dieBPos].status = MARK_IDLE;
+					board[selectedMark].status = MARK_IDLE;
+					board[dieAPos].status = MARK_IDLE;
+					board[dieBPos].status = MARK_IDLE;
 					currentTurn = TURN_BLACK_CHECKING;
 				}
 				// Die 2
-				else if (dieB && markings[dieBPos].status == MARK_LEGAL &&
-						CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
-					markings[selectedMark].pieces++;
-					markings[dieBPos].pieces--;
+				else if (dieB && board[dieBPos].status == MARK_LEGAL &&
+						CheckCollisionPointTriangle(mouseXY, board[dieBPos].v1, board[dieBPos].v2, board[dieBPos].v3)) {
+					board[selectedMark].pieces++;
+					board[dieBPos].pieces--;
 					dieB >>= 4;
-					markings[selectedMark].status = MARK_IDLE;
-					markings[dieAPos].status = MARK_IDLE;
-					markings[dieBPos].status = MARK_IDLE;
+					board[selectedMark].status = MARK_IDLE;
+					board[dieAPos].status = MARK_IDLE;
+					board[dieBPos].status = MARK_IDLE;
 					currentTurn = TURN_BLACK_CHECKING;
 				}
 				// Cancel movement phase
 				else {
-					markings[selectedMark].status = MARK_IDLE;
-					markings[dieAPos].status = MARK_IDLE;
-					markings[dieBPos].status = MARK_IDLE;
+					board[selectedMark].status = MARK_IDLE;
+					board[dieAPos].status = MARK_IDLE;
+					board[dieBPos].status = MARK_IDLE;
 					currentTurn = TURN_BLACK_CHECKING;
 				}
 			}
 			break;
 		case TURN_BLACK_CHECKING:
-			if (LegalMoveCheckBlack(markings, dieA, dieB))
+			if (LegalMoveCheckBlack(board, dieA, dieB))
 				currentTurn = TURN_BLACK_SELECT;
 			else {
 				const float resetTime = 1.0f;
@@ -294,62 +294,62 @@ int main(void)
 				break;
 			}
 			for (int i = 0; i < 24; i++) {
-				if (markings[i].pieces > 0 && CheckCollisionPointTriangle(mouseXY, markings[i].v1, markings[i].v2, markings[i].v3)) {
-					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) markings[i].status = MARK_MOUSEDOWN;
+				if (board[i].pieces > 0 && CheckCollisionPointTriangle(mouseXY, board[i].v1, board[i].v2, board[i].v3)) {
+					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) board[i].status = MARK_MOUSEDOWN;
 					else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 						dieAPos = WhiteOffset(dieA & 0b1111, i), dieBPos = WhiteOffset(dieB & 0b1111, i);
 						currentTurn = TURN_WHITE_MOVE;
-						markings[i].status = MARK_SELECTED;
+						board[i].status = MARK_SELECTED;
 						selectedMark = i;
 						if (dieA != 0 && !(i > 12 && (i - dieA) < 12)) { //Second part is needed to ensure white pieces don't loop.
-							if (markings[dieAPos].pieces < 0) markings[dieAPos].status = MARK_ILLEGAL;
-							else markings[dieAPos].status = MARK_LEGAL;
+							if (board[dieAPos].pieces < 0) board[dieAPos].status = MARK_ILLEGAL;
+							else board[dieAPos].status = MARK_LEGAL;
 						}
 						if (dieB != 0 && !(i > 12 && (i - dieB) < 12)) {
-							if (markings[dieBPos].pieces < 0) markings[dieBPos].status = MARK_ILLEGAL;
-							else markings[dieBPos].status = MARK_LEGAL;
+							if (board[dieBPos].pieces < 0) board[dieBPos].status = MARK_ILLEGAL;
+							else board[dieBPos].status = MARK_LEGAL;
 						}
 						break;
 					}
-					else markings[i].status = MARK_MOUSEON; // Mouse on
+					else board[i].status = MARK_MOUSEON; // Mouse on
 				}
-				else markings[i].status = MARK_IDLE;
+				else board[i].status = MARK_IDLE;
 			}
 			break;
 		case TURN_WHITE_MOVE:
 			if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
 				// Die 1
-				if (dieA && markings[dieAPos].status == MARK_LEGAL &&
-						CheckCollisionPointTriangle(mouseXY, markings[dieAPos].v1, markings[dieAPos].v2, markings[dieAPos].v3)) {
-					markings[selectedMark].pieces--;
-					markings[dieAPos].pieces++;
+				if (dieA && board[dieAPos].status == MARK_LEGAL &&
+						CheckCollisionPointTriangle(mouseXY, board[dieAPos].v1, board[dieAPos].v2, board[dieAPos].v3)) {
+					board[selectedMark].pieces--;
+					board[dieAPos].pieces++;
 					dieA >>= 4;
-					markings[selectedMark].status = MARK_IDLE;
-					markings[dieAPos].status = MARK_IDLE;
-					markings[dieBPos].status = MARK_IDLE;
+					board[selectedMark].status = MARK_IDLE;
+					board[dieAPos].status = MARK_IDLE;
+					board[dieBPos].status = MARK_IDLE;
 					currentTurn = TURN_WHITE_CHECKING;
 				}
 				// Die 2
-				else if (dieB && markings[dieBPos].status == MARK_LEGAL &&
-						CheckCollisionPointTriangle(mouseXY, markings[dieBPos].v1, markings[dieBPos].v2, markings[dieBPos].v3)) {
-					markings[selectedMark].pieces--;
-					markings[dieBPos].pieces++;
+				else if (dieB && board[dieBPos].status == MARK_LEGAL &&
+						CheckCollisionPointTriangle(mouseXY, board[dieBPos].v1, board[dieBPos].v2, board[dieBPos].v3)) {
+					board[selectedMark].pieces--;
+					board[dieBPos].pieces++;
 					dieB >>= 4;
-					markings[selectedMark].status = MARK_IDLE;
-					markings[dieAPos].status = MARK_IDLE;
-					markings[dieBPos].status = MARK_IDLE;
+					board[selectedMark].status = MARK_IDLE;
+					board[dieAPos].status = MARK_IDLE;
+					board[dieBPos].status = MARK_IDLE;
 					currentTurn = TURN_WHITE_CHECKING;
 				}
 				else {
-					markings[selectedMark].status = MARK_IDLE;
-					markings[dieAPos].status = MARK_IDLE;
-					markings[dieBPos].status = MARK_IDLE;
+					board[selectedMark].status = MARK_IDLE;
+					board[dieAPos].status = MARK_IDLE;
+					board[dieBPos].status = MARK_IDLE;
 					currentTurn = TURN_WHITE_CHECKING;
 				}
 			}
 			break;
 		case TURN_WHITE_CHECKING:
-			if (LegalMoveCheckWhite(markings, dieA, dieB))
+			if (LegalMoveCheckWhite(board, dieA, dieB))
 				currentTurn = TURN_WHITE_SELECT;
 			else {
 				const float resetTime = 1.0f;
@@ -377,16 +377,16 @@ int main(void)
 			// Board markings
 			for (int i = 0; i < 24; i++) {
 				// Top
-				DrawTriangle(markings[i].v1, markings[i].v2, markings[i].v3, statusColor[markings[i].status]);
+				DrawTriangle(board[i].v1, board[i].v2, board[i].v3, statusColor[board[i].status]);
 				// Drawing pieces
-				if (markings[i].pieces != 0) {
+				if (board[i].pieces != 0) {
 					float pieceRadius = 6.0f;
-					int x = (int) markings[i].v2.x;
-					int y = (int) markings[i].v1.y;
+					int x = (int) board[i].v2.x;
+					int y = (int) board[i].v1.y;
 					if (i < 12) y += pieceRadius;
 					else  y -= pieceRadius;
-					Color pieceColor = markings[i].pieces > 0 ? WHITE : BLACK;
-					for (int j = 0; j < abs(markings[i].pieces); j++) {
+					Color pieceColor = board[i].pieces > 0 ? WHITE : BLACK;
+					for (int j = 0; j < abs(board[i].pieces); j++) {
 						DrawCircle(x, y, pieceRadius, pieceColor);
 						DrawCircleLines(x, y, pieceRadius, DARKGRAY);
 						if (i < 12) y += pieceRadius * 2;
