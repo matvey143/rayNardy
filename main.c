@@ -23,42 +23,42 @@ void ThrowDice(unsigned char *dice1, unsigned char *dice2)
 	}
 }
 
-void DrawDice(unsigned char value, Rectangle dice)
+void DrawDie(unsigned char value, Rectangle die)
 {
 	const float dotRadius = 4.0f;
 	switch (value & 0b1111) {
 	case 1:
-		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.50f, dotRadius, BLACK);
+		DrawCircle(die.x + die.width * 0.50f, die.y + die.height * 0.50f, dotRadius, BLACK);
 		break;
 	case 2:
-		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
+		DrawCircle(die.x + die.width * 0.25f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-left
+		DrawCircle(die.x + die.width * 0.75f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	case 3:
-		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.50f, dotRadius, BLACK); // Middle
-		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
+		DrawCircle(die.x + die.width * 0.25f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-left
+		DrawCircle(die.x + die.width * 0.50f, die.y + die.height * 0.50f, dotRadius, BLACK); // Middle
+		DrawCircle(die.x + die.width * 0.75f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	case 4:
-		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Right
-		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-left
-		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
+		DrawCircle(die.x + die.width * 0.25f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-left
+		DrawCircle(die.x + die.width * 0.75f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-Right
+		DrawCircle(die.x + die.width * 0.25f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-left
+		DrawCircle(die.x + die.width * 0.75f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	case 5:
-		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Right
-		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.50f, dotRadius, BLACK); // Middle
-		DrawCircle(dice.x + dice.width * 0.25f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-left
-		DrawCircle(dice.x + dice.width * 0.75f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
+		DrawCircle(die.x + die.width * 0.25f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-left
+		DrawCircle(die.x + die.width * 0.75f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-Right
+		DrawCircle(die.x + die.width * 0.50f, die.y + die.height * 0.50f, dotRadius, BLACK); // Middle
+		DrawCircle(die.x + die.width * 0.25f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-left
+		DrawCircle(die.x + die.width * 0.75f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	case 6:
-		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-left
-		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Mid
-		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.25f, dotRadius, BLACK); // Top-Right
-		DrawCircle(dice.x + dice.width * 0.25f,	dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-left
-		DrawCircle(dice.x + dice.width * 0.50f, dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-mid
-		DrawCircle(dice.x + dice.width * 0.75f,	dice.y + dice.height * 0.75f, dotRadius, BLACK); // Bottom-right
+		DrawCircle(die.x + die.width * 0.25f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-left
+		DrawCircle(die.x + die.width * 0.50f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-Mid
+		DrawCircle(die.x + die.width * 0.75f, die.y + die.height * 0.25f, dotRadius, BLACK); // Top-Right
+		DrawCircle(die.x + die.width * 0.25f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-left
+		DrawCircle(die.x + die.width * 0.50f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-mid
+		DrawCircle(die.x + die.width * 0.75f, die.y + die.height * 0.75f, dotRadius, BLACK); // Bottom-right
 		break;
 	default:
 		break;
@@ -412,10 +412,10 @@ int main(void)
 			Rectangle dieRight = {570.0f, 50.0f, 50.0f, 50.0f};
 			DrawRectangleRec(dieLeft, WHITE);
 			DrawRectangleLinesEx(dieLeft, 2.0f, BLACK);
-			DrawDice(dieA, dieLeft);
+			DrawDie(dieA, dieLeft);
 			DrawRectangleRec(dieRight, WHITE);
 			DrawRectangleLinesEx(dieRight, 2.0f, BLACK);
-			DrawDice(dieB, dieRight);
+			DrawDie(dieB, dieRight);
 			if (currentTurn == TURN_WHITE_ABORTING || currentTurn == TURN_BLACK_ABORTING) {
 				// Pop-up window will be here.
 				int boxX = WINDOW_W / 4, boxY = WINDOW_H / 4;
