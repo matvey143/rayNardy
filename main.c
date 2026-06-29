@@ -23,10 +23,10 @@ void ThrowDice(unsigned char *dice1, unsigned char *dice2)
 	}
 }
 
-void DrawDie(unsigned char value, Rectangle die)
+void DrawDie(unsigned char rawValue, Rectangle die)
 {
 	const float dotRadius = 4.0f;
-	switch (value & 0b1111) {
+	switch (rawValue & 0b1111) {
 	case 1:
 		DrawCircle(die.x + die.width * 0.50f, die.y + die.height * 0.50f, dotRadius, BLACK);
 		break;
@@ -203,11 +203,6 @@ int main(void)
 		float frameTime = GetFrameTime();
 		switch (currentTurn) {
 		case TURN_BLACK_SELECT:
-			if (!dieA && !dieB) {
-				currentTurn = TURN_WHITE_CHECKING;
-				ThrowDice(&dieA, &dieB);
-				break;
-			}
 			for (int i = 0; i < 24; i++) {
 				if (board[i].pieces < 0 && CheckCollisionPointTriangle(mouseXY, board[i].v1, board[i].v2, board[i].v3)) {
 					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
@@ -270,6 +265,11 @@ int main(void)
 			}
 			break;
 		case TURN_BLACK_CHECKING:
+			if (!dieA && !dieB) {
+				currentTurn = TURN_WHITE_CHECKING;
+				ThrowDice(&dieA, &dieB);
+				break;
+			}
 			if (LegalMoveCheckBlack(board, dieA, dieB))
 				currentTurn = TURN_BLACK_SELECT;
 			else {
@@ -286,11 +286,6 @@ int main(void)
 			}
 			break;
 		case TURN_WHITE_SELECT:
-			if (!dieA && !dieB) {
-				currentTurn = TURN_BLACK_CHECKING;
-				ThrowDice(&dieA, &dieB);
-				break;
-			}
 			for (int i = 0; i < 24; i++) {
 				if (board[i].pieces > 0 && CheckCollisionPointTriangle(mouseXY, board[i].v1, board[i].v2, board[i].v3)) {
 					if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) board[i].status = MARK_MOUSEDOWN;
@@ -347,6 +342,11 @@ int main(void)
 			}
 			break;
 		case TURN_WHITE_CHECKING:
+			if (!dieA && !dieB) {
+				currentTurn = TURN_BLACK_CHECKING;
+				ThrowDice(&dieA, &dieB);
+				break;
+			}
 			if (LegalMoveCheckWhite(board, dieA, dieB))
 				currentTurn = TURN_WHITE_SELECT;
 			else {
