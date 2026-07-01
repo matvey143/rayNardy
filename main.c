@@ -94,7 +94,7 @@ enum Turn {
 };
 
 // Assumes 24 space board
-void updateMarkPosition(struct BoardMark *markArray)
+void UpdateMarkPosition(struct BoardMark *markArray)
 {
 	const float trianglePad = (WINDOW_H / 2.0 - PADDING * 2.0) / 19.0;
 	// Left
@@ -188,7 +188,7 @@ int main(void)
 	statusColor[MARK_SELECTED] = BLUE;
 	statusColor[MARK_LEGAL] = GREEN;
 	statusColor[MARK_ILLEGAL] = RED;
-	updateMarkPosition(board);
+	UpdateMarkPosition(board);
 
 	unsigned char dieA, dieB;
 	int resultA, resultB;
@@ -196,6 +196,7 @@ int main(void)
 
 	int selectedMark;
 	enum Turn currentTurn = 0;
+	unsigned long turnCount = 0;
 
 	float abortTimer; // For banner, notifying that no turn is possible. After some time turn is passed.
 	while (!WindowShouldClose()) {
@@ -267,6 +268,8 @@ int main(void)
 		case TURN_BLACK_CHECKING:
 			if (!dieA && !dieB) {
 				currentTurn = TURN_WHITE_CHECKING;
+				UpdateMarkPosition(board);
+				turnCount++;
 				ThrowDice(&dieA, &dieB);
 				break;
 			}
@@ -282,6 +285,8 @@ int main(void)
 			abortTimer -= frameTime;
 			if (abortTimer <= 0.0f) {
 				ThrowDice(&dieA, &dieB);
+				turnCount++;
+				UpdateMarkPosition(board);
 				currentTurn = TURN_WHITE_CHECKING;
 			}
 			break;
@@ -344,6 +349,8 @@ int main(void)
 		case TURN_WHITE_CHECKING:
 			if (!dieA && !dieB) {
 				currentTurn = TURN_BLACK_CHECKING;
+				UpdateMarkPosition(board);
+				turnCount++;
 				ThrowDice(&dieA, &dieB);
 				break;
 			}
@@ -359,6 +366,8 @@ int main(void)
 			abortTimer -= frameTime;
 			if (abortTimer <= 0.0f) {
 				ThrowDice(&dieA, &dieB);
+				turnCount++;
+				UpdateMarkPosition(board);
 				currentTurn = TURN_BLACK_CHECKING;
 			}
 			break;
