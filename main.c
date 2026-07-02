@@ -229,7 +229,7 @@ int main(void)
 					}
 					else board[i].status = MARK_MOUSEON; // Mouse on
 				}
-				else board[i].status = MARK_IDLE;
+				else if (board[i].status != MARK_ILLEGAL) board[i].status = MARK_IDLE;
 			}
 			break;
 		case TURN_BLACK_MOVE:
@@ -319,7 +319,7 @@ int main(void)
 					}
 					else board[i].status = MARK_MOUSEON; // Mouse on
 				}
-				else board[i].status = MARK_IDLE;
+				else if (board[i].status != MARK_ILLEGAL) board[i].status = MARK_IDLE;
 			}
 			break;
 		case TURN_WHITE_MOVE:
