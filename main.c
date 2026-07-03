@@ -418,6 +418,9 @@ int main(void)
 		}
 		BeginDrawing();
 		{
+			float pieceRadius = 6.0f;
+			float goalW = pieceRadius * 2.0f;
+			float goalH = pieceRadius * 30.0f;
 			// Board
 			ClearBackground((Color){0xDA, 0x9D, 0x64, 0xFF});
 			// Board borders
@@ -431,7 +434,6 @@ int main(void)
 				DrawTriangle(board[i].v1, board[i].v2, board[i].v3, statusColor[board[i].status]);
 				// Drawing pieces
 				if (board[i].pieces != 0) {
-					float pieceRadius = 6.0f;
 					int x = (int) board[i].v2.x;
 					int y = (int) board[i].v1.y;
 					if (i < 12) y += pieceRadius;
@@ -477,6 +479,9 @@ int main(void)
 				int messagePad2 = (boxW - MeasureText("No legal move is possible.", 24)) / 2;
 				DrawText("No legal move is possible.", boxX + messagePad2, boxY + 80, 24, WHITE);
 			}
+			// Goal bars.
+			DrawRectangle(WINDOW_H + PADDING, WINDOW_H - PADDING - goalH, goalW, goalH, DARKGRAY);
+			DrawRectangle(WINDOW_W - PADDING - goalW, WINDOW_H - PADDING - goalH, goalW, goalH, DARKGRAY);
 		}
 		EndDrawing();
 	}
