@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "raylib.h"
+#include <stdbool.h>
 
 #define WINDOW_W 640
 #define WINDOW_H 480
@@ -162,6 +163,24 @@ bool LegalMoveCheckWhite(struct BoardMark *board, unsigned char rawDieA, unsigne
 	return false;
 }
 
+bool CheckEndgameWhite(struct BoardMark *board)
+{
+	for (int i = 0; i < 12; i++)
+		if (board[i].pieces > 0) return false;
+	for (int i = 18; i < 24; i++)
+		if (board[i].pieces > 0) return false;
+	return true;
+}
+
+bool CheckEndgameBlack(struct BoardMark *board)
+{
+	for (int i = 6; i < 12; i++)
+		if (board[i].pieces < 0) return false;
+	for (int i = 12; i < 24; i++)
+		if (board[i].pieces < 0) return false;
+	return true;
+}
+
 int main(void)
 {
 	srand(time(NULL));
@@ -197,6 +216,9 @@ int main(void)
 	int selectedMark;
 	enum Turn currentTurn = 0;
 	unsigned long turnCount = 0;
+
+	bool whiteEndgame = false;
+	bool blackEndgame = false;
 
 	float abortTimer; // For banner, notifying that no turn is possible. After some time turn is passed.
 	while (!WindowShouldClose()) {
@@ -276,6 +298,8 @@ int main(void)
 			if (!dieA && !dieB) {
 				currentTurn = TURN_WHITE_CHECKING;
 				UpdateMarkPosition(board);
+				if (CheckEndgameWhite(board))
+					whiteEndgame = true;
 				turnCount++;
 				ThrowDice(&dieA, &dieB);
 				break;
@@ -294,6 +318,8 @@ int main(void)
 				ThrowDice(&dieA, &dieB);
 				turnCount++;
 				UpdateMarkPosition(board);
+				if (CheckEndgameWhite(board))
+					whiteEndgame = true;
 				currentTurn = TURN_WHITE_CHECKING;
 			}
 			break;
@@ -364,6 +390,8 @@ int main(void)
 			if (!dieA && !dieB) {
 				currentTurn = TURN_BLACK_CHECKING;
 				UpdateMarkPosition(board);
+				if (CheckEndgameBlack(board))
+					blackEndgame = true;
 				turnCount++;
 				ThrowDice(&dieA, &dieB);
 				break;
@@ -382,6 +410,8 @@ int main(void)
 				ThrowDice(&dieA, &dieB);
 				turnCount++;
 				UpdateMarkPosition(board);
+				if (CheckEndgameBlack(board))
+					blackEndgame = true;
 				currentTurn = TURN_BLACK_CHECKING;
 			}
 			break;
