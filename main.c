@@ -136,7 +136,7 @@ int WhiteOffset(unsigned char die, int position)
 }
 
 // Legal move check should occur every time enum Turn is about to be set to select phase.
-bool LegalMoveCheckBlack(struct BoardMark *board, unsigned char rawDieA, unsigned char rawDieB)
+bool LegalMoveCheckBlack(struct BoardMark *board, unsigned char rawDieA, unsigned char rawDieB, bool endgame)
 {
 	unsigned int dieA = rawDieA & 0b1111, dieB = rawDieB & 0b1111;
 	for (int i = 0; i < 24; i++) {
@@ -149,7 +149,7 @@ bool LegalMoveCheckBlack(struct BoardMark *board, unsigned char rawDieA, unsigne
 	return false;
 }
 
-bool LegalMoveCheckWhite(struct BoardMark *board, unsigned char rawDieA, unsigned char rawDieB)
+bool LegalMoveCheckWhite(struct BoardMark *board, unsigned char rawDieA, unsigned char rawDieB, bool endgame)
 {
 	unsigned int dieA = rawDieA & 0b1111, dieB = rawDieB & 0b1111;
 	for (int i = 0; i < 24; i++) {
@@ -304,7 +304,7 @@ int main(void)
 				ThrowDice(&dieA, &dieB);
 				break;
 			}
-			if (LegalMoveCheckBlack(board, dieA, dieB))
+			if (LegalMoveCheckBlack(board, dieA, dieB, blackEndgame))
 				currentTurn = TURN_BLACK_SELECT;
 			else {
 				const float resetTime = 1.0f;
@@ -396,7 +396,7 @@ int main(void)
 				ThrowDice(&dieA, &dieB);
 				break;
 			}
-			if (LegalMoveCheckWhite(board, dieA, dieB))
+			if (LegalMoveCheckWhite(board, dieA, dieB, whiteEndgame))
 				currentTurn = TURN_WHITE_SELECT;
 			else {
 				const float resetTime = 1.0f;
