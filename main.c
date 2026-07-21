@@ -130,7 +130,6 @@ void UpdateMarkPosition(struct BoardMark *markArray)
 	}
 }
 
-// Will be adjusted in future to account for endgame.
 int WhiteOffset(unsigned char die, int position)
 {
 	if (position - die > 0) return position - die;
@@ -371,6 +370,10 @@ int main(void)
 							if (board[resultB].pieces < 0) board[resultB].status = MARK_ILLEGAL;
 							else board[resultB].status = MARK_LEGAL;
 						}
+						if (whiteEndgame) {
+							if (selectedMark + dieA >= 12 || selectedMark + dieB >= 12)
+								wGoalAvailable = true;
+						}
 						break;
 					}
 					else board[i].status = MARK_MOUSEON; // Mouse on
@@ -392,6 +395,7 @@ int main(void)
 						board[selectedMark].status = MARK_IDLE;
 					if (resultA != selectedMark) board[resultA].status = MARK_IDLE;
 					if (resultB != selectedMark) board[resultB].status = MARK_IDLE;
+					wGoalAvailable = false;
 					currentTurn = TURN_WHITE_CHECKING;
 				}
 				// Die 2
@@ -406,12 +410,25 @@ int main(void)
 						board[selectedMark].status = MARK_IDLE;
 					if (resultA != selectedMark) board[resultA].status = MARK_IDLE;
 					if (resultB != selectedMark) board[resultB].status = MARK_IDLE;
+					wGoalAvailable = false;
 					currentTurn = TURN_WHITE_CHECKING;
+				}
+				else if (CheckCollisionPointRec(mouseXY, wGoal)) {
+					wGoalAvailable = false;
+					board[selectedMark].pieces--;
+					wGoalCount++;
+					// Normally you would select die here, but I was too lazy to implement it properly.
+					// So I just take lesser of too dice.
+					if (!dieA ^ dieA > dieB)
+						dieB >>= 4;
+					else
+						dieA >>= 4;
 				}
 				else {
 					board[selectedMark].status = MARK_IDLE;
 					board[resultA].status = MARK_IDLE;
 					board[resultB].status = MARK_IDLE;
+					wGoalAvailable = false;
 					currentTurn = TURN_WHITE_CHECKING;
 				}
 			}
