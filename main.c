@@ -91,7 +91,9 @@ enum Turn {
 	TURN_WHITE_SELECT = 4,
 	TURN_WHITE_MOVE = 5,
 	TURN_WHITE_CHECKING = 6,
-	TURN_WHITE_ABORTING = 7
+	TURN_WHITE_ABORTING = 7,
+	BLACK_WIN = 8,
+	WHITE_WIN = 9
 };
 
 // Assumes 24 space board
@@ -227,6 +229,10 @@ int main(void)
 	float goalH = pieceRadius * 30.0f;
 	Rectangle wGoal = {WINDOW_H + PADDING, WINDOW_H - PADDING - goalH, goalW, goalH};
 	Rectangle bGoal = {WINDOW_W - PADDING - goalW, WINDOW_H - PADDING - goalH, goalW, goalH};
+	bool wGoalAvailable = false;
+	bool bGoalAvailable = false;
+	int bGoalCount = 0;
+	int wGoalCount = 0;
 	while (!WindowShouldClose()) {
 		Vector2 mouseXY = GetMousePosition();
 		float frameTime = GetFrameTime();
@@ -246,12 +252,16 @@ int main(void)
 								board[i - (dieA & 0b1111)].status = MARK_ILLEGAL;
 							else
 								board[i - (dieA & 0b1111)].status = MARK_LEGAL;
+							if (blackEndgame && selectedMark - dieA < 0)
+								wGoalAvailable = true;
 						}
 						if (dieB != 0) {
 							if (board[i - (dieB & 0b1111)].pieces > 0)
 								board[i - (dieB & 0b1111)].status = MARK_ILLEGAL;
 							else
 								board[i - (dieB & 0b1111)].status = MARK_LEGAL;
+							if (blackEndgame && selectedMark - dieB < 0)
+								wGoalAvailable = true;
 						}
 						break;
 					}
@@ -275,6 +285,7 @@ int main(void)
 						board[selectedMark].status = MARK_IDLE;
 					if (resultA != selectedMark) board[resultA].status = MARK_IDLE;
 					if (resultB != selectedMark) board[resultB].status = MARK_IDLE;
+					bGoalAvailable = false;
 					currentTurn = TURN_BLACK_CHECKING;
 				}
 				// Die 2
@@ -289,13 +300,26 @@ int main(void)
 						board[selectedMark].status = MARK_IDLE;
 					if (resultA != selectedMark) board[resultA].status = MARK_IDLE;
 					if (resultB != selectedMark) board[resultB].status = MARK_IDLE;
+					bGoalAvailable = false;
 					currentTurn = TURN_BLACK_CHECKING;
+				}
+				else if (CheckCollisionPointRec(mouseXY, bGoal)) {
+					bGoalAvailable = false;
+					board[selectedMark].pieces++;
+					bGoalCount++;
+					// Normally you would select die here, but I was too lazy to implement it properly.
+					// So I just take lesser of too dice.
+					if (!dieA ^ dieA > dieB)
+						dieB >>= 4;
+					else
+						dieA >>= 4;
 				}
 				// Cancel movement phase
 				else {
 					board[selectedMark].status = MARK_IDLE;
 					board[resultA].status = MARK_IDLE;
 					board[resultB].status = MARK_IDLE;
+					bGoalAvailable = false;
 					currentTurn = TURN_BLACK_CHECKING;
 				}
 			}
@@ -421,11 +445,28 @@ int main(void)
 				currentTurn = TURN_BLACK_CHECKING;
 			}
 			break;
+		case BLACK_WIN:
+			// Empty, lol
+			break;
+		case WHITE_WIN:
+			break;
 		}
 		BeginDrawing();
 		{
 			// Board
 			ClearBackground((Color){0xDA, 0x9D, 0x64, 0xFF});
+			if (currentTurn == BLACK_WIN) {
+				char *blackWinText = "BLACK WINS!";
+				int textSize = MeasureText(blackWinText, 64);
+				DrawText(blackWinText, (WINDOW_W / 2) - (textSize / 2), (WINDOW_H / 2), 32, BLACK);
+				continue;
+			}
+			else if (currentTurn == WHITE_WIN) {
+				char *whiteWinText = "WHITE WINS!";
+				int textSize = MeasureText(whiteWinText, 64);
+				DrawText(whiteWinText, (WINDOW_W / 2) - (textSize / 2), (WINDOW_H / 2), 32, BLACK);
+				continue;
+			}
 			// Board borders
 			DrawRectangleLinesEx((Rectangle){0.0, 0.0, (float)WINDOW_H / 2, (float)WINDOW_H},
 					PADDING, (Color) {0x6F, 0x4F, 0x2F, 0xFF});
@@ -483,8 +524,18 @@ int main(void)
 				DrawText("No legal move is possible.", boxX + messagePad2, boxY + 80, 24, WHITE);
 			}
 			// Goal bars.
-			DrawRectangleRec(wGoal, DARKGRAY);
-			DrawRectangleRec(bGoal, DARKGRAY);
+			if (wGoalAvailable)
+				DrawRectangleRec(wGoal, GREEN);
+			else
+				DrawRectangleRec(wGoal, DARKGRAY);
+			if (bGoalAvailable)
+				DrawRectangleRec(bGoal, GREEN);
+			else
+				DrawRectangleRec(bGoal, DARKGRAY);
+			for (int i = 0; i < bGoalCount; i++)
+				DrawCircle(bGoal.x + pieceRadius + (i * 2 * pieceRadius), bGoal.y, pieceRadius, BLACK);
+			for (int i = 0; i < wGoalCount; i++)
+				DrawCircle(wGoal.x + pieceRadius + (i * 2 * pieceRadius), wGoal.y, pieceRadius, WHITE);
 		}
 		EndDrawing();
 	}
