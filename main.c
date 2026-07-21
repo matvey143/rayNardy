@@ -221,6 +221,12 @@ int main(void)
 	bool blackEndgame = false;
 
 	float abortTimer; // For banner, notifying that no turn is possible. After some time turn is passed.
+	
+	float pieceRadius = 6.0f;
+	float goalW = pieceRadius * 2.0f;
+	float goalH = pieceRadius * 30.0f;
+	Rectangle wGoal = {WINDOW_H + PADDING, WINDOW_H - PADDING - goalH, goalW, goalH};
+	Rectangle bGoal = {WINDOW_W - PADDING - goalW, WINDOW_H - PADDING - goalH, goalW, goalH};
 	while (!WindowShouldClose()) {
 		Vector2 mouseXY = GetMousePosition();
 		float frameTime = GetFrameTime();
@@ -418,9 +424,6 @@ int main(void)
 		}
 		BeginDrawing();
 		{
-			float pieceRadius = 6.0f;
-			float goalW = pieceRadius * 2.0f;
-			float goalH = pieceRadius * 30.0f;
 			// Board
 			ClearBackground((Color){0xDA, 0x9D, 0x64, 0xFF});
 			// Board borders
@@ -480,8 +483,8 @@ int main(void)
 				DrawText("No legal move is possible.", boxX + messagePad2, boxY + 80, 24, WHITE);
 			}
 			// Goal bars.
-			DrawRectangle(WINDOW_H + PADDING, WINDOW_H - PADDING - goalH, goalW, goalH, DARKGRAY);
-			DrawRectangle(WINDOW_W - PADDING - goalW, WINDOW_H - PADDING - goalH, goalW, goalH, DARKGRAY);
+			DrawRectangleRec(wGoal, DARKGRAY);
+			DrawRectangleRec(bGoal, DARKGRAY);
 		}
 		EndDrawing();
 	}
